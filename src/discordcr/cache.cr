@@ -34,8 +34,9 @@ module Discord
   # refrain from caching at all.
   abstract class GenericCache
     property :client, :users, :channels,
-             :guilds, :members, :roles,
-             :dm_channels, :guild_roles, :guild_channels
+      :guilds, :members, :roles,
+      :dm_channels, :guild_roles, :guild_channels
+
     def initialize(@client : Client)
       @users = Hash(UInt64, User).new
       @channels = Hash(UInt64, Channel).new
@@ -47,42 +48,44 @@ module Discord
 
       @guild_roles = Hash(UInt64, Array(UInt64)).new
       @guild_channels = Hash(UInt64, Array(UInt64)).new
-   end
+    end
 
-   abstract def resolve_user(id : UInt64) : User
-   abstract def resolve_channel(id : UInt64) : Channel
-   abstract def resolve_guild(id : UInt64) : Guild
-   abstract def resolve_member(guild_id : UInt64, user_id : UInt64) : GuildMember
-   abstract def resolve_role(id : UInt64) : Role
-   abstract def resolve_dm_channel(recipient_id : UInt64) : UInt64
-   abstract def resolve_current_user : User
-   abstract def delete_user(id : UInt64)
-   abstract def delete_channel(id : UInt64)
-   abstract def delete_guild(id : UInt64)
-   abstract def delete_member(guild_id : UInt64, user_id : UInt64)
-   abstract def delete_role(id : UInt64)
-   abstract def delete_dm_channel(recipient_id : UInt64)
-   abstract def delete_current_user
-   abstract def cache(user : User)
-   abstract def cache(channel : Channel)
-   abstract def cache(guild : Guild)
-   abstract def cache(member : GuildMember, guild_id : UInt64)
-   abstract def cache(role : Role)
-   abstract def cache_dm_channel(channel_id : UInt64, recipient_id : UInt64)
-   abstract def cache_current_user(@current_user : User)
-   abstract def cache_multiple_members(members : Array(GuildMember), guild_id : UInt64)
-   abstract def guild_roles(guild_id : UInt64) : Array(UInt64)
-   abstract def add_guild_role(guild_id : UInt64, role_id : UInt64)
-   abstract def remove_guild_role(guild_id : UInt64, role_id : UInt64)
-   abstract def guild_channels(guild_id : UInt64) : Array(UInt64)
-   abstract def add_guild_channel(guild_id : UInt64, channel_id : UInt64)
-   abstract def remove_guild_channel(guild_id : UInt64, channel_id : UInt64)
+    abstract def resolve_user(id : UInt64) : User
+    abstract def resolve_channel(id : UInt64) : Channel
+    abstract def resolve_guild(id : UInt64) : Guild
+    abstract def resolve_member(guild_id : UInt64, user_id : UInt64) : GuildMember
+    abstract def resolve_role(id : UInt64) : Role
+    abstract def resolve_dm_channel(recipient_id : UInt64) : UInt64
+    abstract def resolve_current_user : User
+    abstract def delete_user(id : UInt64)
+    abstract def delete_channel(id : UInt64)
+    abstract def delete_guild(id : UInt64)
+    abstract def delete_member(guild_id : UInt64, user_id : UInt64)
+    abstract def delete_role(id : UInt64)
+    abstract def delete_dm_channel(recipient_id : UInt64)
+    abstract def delete_current_user
+    abstract def cache(user : User)
+    abstract def cache(channel : Channel)
+    abstract def cache(guild : Guild)
+    abstract def cache(member : GuildMember, guild_id : UInt64)
+    abstract def cache(role : Role)
+    abstract def cache_dm_channel(channel_id : UInt64, recipient_id : UInt64)
+    abstract def cache_current_user(@current_user : User)
+    abstract def cache_multiple_members(members : Array(GuildMember), guild_id : UInt64)
+    abstract def guild_roles(guild_id : UInt64) : Array(UInt64)
+    abstract def add_guild_role(guild_id : UInt64, role_id : UInt64)
+    abstract def remove_guild_role(guild_id : UInt64, role_id : UInt64)
+    abstract def guild_channels(guild_id : UInt64) : Array(UInt64)
+    abstract def add_guild_channel(guild_id : UInt64, channel_id : UInt64)
+    abstract def remove_guild_channel(guild_id : UInt64, channel_id : UInt64)
   end
 
   class Cache < GenericCache
     # Creates a new cache with a *client* that requests (in case of cache
     # misses) should be done on.
-    def initialize(@client : Client) super end
+    def initialize(@client : Client)
+      super
+    end
 
     # Resolves a user by its *ID*. If the requested object is not cached, it
     # will do an API call.
