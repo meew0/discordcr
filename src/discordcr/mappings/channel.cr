@@ -17,6 +17,63 @@ module Discord
       embeds: Array(Embed),
       pinned: {type: Bool, nilable: true}
     )
+
+    # A mention contained within a message, constructed by its type,
+    # the snowflake, and it's name if it is an emoji.
+    alias Mention = Tuple(MentionType, UInt64?, String?)
+
+    # A hash map of regex describing how mentions are parsed by type
+    MENTION_REGEX = {
+      MentionType::User     => /<@!?(?<id>\d+)>/,
+      MentionType::Role     => /<@&(?<id>\d+)>/,
+      MentionType::Channel  => /<#(?<id>\d+)>/,
+      MentionType::Emoji    => /<:(?<name>\w+):(?<id>\d+)>/,
+      MentionType::Everyone => /@everyone/,
+      MentionType::Here     => /@here/,
+    }
+
+    # Returns a map of all mentions contained in the message.
+    def parse_mentions
+      mentions = {} of MentionType => Array(Mention)
+
+      {% for typ in {
+                      MentionType::User,
+                      MentionType::Role,
+                      MentionType::Channel,
+                      MentionType::Emoji,
+                      MentionType::Everyone,
+                      MentionType::Here,
+                    } %}
+        mentions[MentionType.new({{typ}})] = parse_mentions(MentionType.new({{typ}}))
+      {% end %}
+      mentions
+    end
+
+    # Returns an array of mentions in the message of a particular type.
+    def parse_mentions(typ : MentionType)
+      content.scan(MENTION_REGEX[typ]).map do |match|
+        id = match["id"]?.try &.to_u64
+        Mention.new(MentionType.new(typ.to_i), id, match["name"]?)
+      end
+    end
+
+    # Does work on the mentions contained in the message with
+    # a provided block.
+    def parse_mentions(&block : Mention ->)
+      MentionType.each do |typ|
+        parse_mentions(typ).each { |mention| yield mention }
+      end
+    end
+  end
+
+  # An enum of the different kinds of Discord mentions
+  enum MentionType
+    User
+    Role
+    Channel
+    Emoji
+    Everyone
+    Here
   end
 
   struct Channel
