@@ -580,7 +580,7 @@ module Discord
     def modify_guild(guild_id : UInt64, name : String?, region : String?,
                      verification_level : UInt8?, afk_channel_id : UInt64?,
                      afk_timeout : Int32?, icon : String?, owner_id : UInt64?,
-                     splash : String?)
+                     splash : String?, reason : String? = nil)
       json = {
         name:               name,
         region:             region,
@@ -597,7 +597,7 @@ module Discord
         guild_id,
         "PATCH",
         "/guilds/#{guild_id}",
-        HTTP::Headers{"Content-Type" => "application/json"},
+        HTTP::Headers{"Content-Type" => "application/json", "X-Audit-Log-Reason" => reason},
         json
       )
 
@@ -641,7 +641,7 @@ module Discord
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#create-guild-channel)
     def create_guild_channel(guild_id : UInt64, name : String, type : UInt8,
-                             bitrate : UInt32?, user_limit : UInt32?)
+                             bitrate : UInt32?, user_limit : UInt32?, reason : String? = nil)
       json = {
         name:       name,
         type:       type,
@@ -654,7 +654,7 @@ module Discord
         guild_id,
         "POST",
         "/guilds/#{guild_id}/channels",
-        HTTP::Headers{"Content-Type" => "application/json"},
+        HTTP::Headers{"Content-Type" => "application/json", "X-Audit-Log-Reason" => reason},
         json
       )
 
@@ -666,7 +666,7 @@ module Discord
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-channel)
     def modify_guild_channel(guild_id : UInt64, channel_id : UInt64,
-                             position : UInt64)
+                             position : UInt64, reason : String? = nil)
       json = {
         id:       channel_id,
         position: position,
@@ -677,7 +677,7 @@ module Discord
         guild_id,
         "PATCH",
         "/guilds/#{guild_id}/channels",
-        HTTP::Headers{"Content-Type" => "application/json"},
+        HTTP::Headers{"Content-Type" => "application/json", "X-Audit-Log-Reason" => reason},
         json
       )
 
@@ -733,7 +733,7 @@ module Discord
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-member)
     def modify_guild_member(guild_id : UInt64, user_id : UInt64, nick : String?,
                             roles : Array(UInt64)?, mute : Bool?, deaf : Bool?,
-                            channel_id : UInt64?)
+                            channel_id : UInt64?, reason : String? = nil)
       json = {
         nick:       nick,
         roles:      roles,
@@ -747,7 +747,7 @@ module Discord
         guild_id,
         "PATCH",
         "/guilds/#{guild_id}/members/#{user_id}",
-        HTTP::Headers{"Content-Type" => "application/json"},
+        HTTP::Headers{"Content-Type" => "application/json", "X-Audit-Log-Reason" => reason},
         json
       )
     end
@@ -755,13 +755,13 @@ module Discord
     # Kicks a member from the server. Requires the "Kick Members" permission.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#remove-guild-member)
-    def remove_guild_member(guild_id : UInt64, user_id : UInt64)
+    def remove_guild_member(guild_id : UInt64, user_id : UInt64, reason : String? = nil)
       response = request(
         :guilds_gid_members_uid,
         guild_id,
         "DELETE",
         "/guilds/#{guild_id}/members/#{user_id}",
-        HTTP::Headers.new,
+        HTTP::Headers{"X-Audit-Log-Reason" => reason},
         nil
       )
     end
@@ -786,13 +786,13 @@ module Discord
     # Bans a member from the guild. Requires the "Ban Members" permission.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#create-guild-ban)
-    def create_guild_ban(guild_id : UInt64, user_id : UInt64)
+    def create_guild_ban(guild_id : UInt64, user_id : UInt64, reason : String? = nil)
       response = request(
         :guilds_gid_bans_uid,
         guild_id,
         "PUT",
         "/guilds/#{guild_id}/bans/#{user_id}",
-        HTTP::Headers.new,
+        HTTP::Headers{"X-Audit-Log-Reason" => reason},
         nil
       )
     end
@@ -800,13 +800,13 @@ module Discord
     # Unbans a member from the guild. Requires the "Ban Members" permission.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#remove-guild-ban)
-    def remove_guild_ban(guild_id : UInt64, user_id : UInt64)
+    def remove_guild_ban(guild_id : UInt64, user_id : UInt64, reason : String? = nil)
       response = request(
         :guilds_gid_bans_uid,
         guild_id,
         "DELETE",
         "/guilds/#{guild_id}/bans/#{user_id}",
-        HTTP::Headers.new,
+        HTTP::Headers{"X-Audit-Log-Reason" => reason},
         nil
       )
     end
@@ -830,13 +830,13 @@ module Discord
     # Creates a new role on the guild. Requires the "Manage Roles" permission.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#create-guild-role)
-    def create_guild_role(guild_id : UInt64)
+    def create_guild_role(guild_id : UInt64, reason : String? = nil)
       response = request(
         :get_guild_roles,
         guild_id,
         "POST",
         "/guilds/#{guild_id}/roles",
-        HTTP::Headers.new,
+        HTTP::Headers{"X-Audit-Log-Reason" => reason},
         nil
       )
 
@@ -849,7 +849,7 @@ module Discord
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-role)
     def modify_guild_role(guild_id : UInt64, role_id : UInt64, name : String?,
                           permissions : Permissions, colour : UInt32?,
-                          position : Int32?, hoist : Bool?)
+                          position : Int32?, hoist : Bool?, reason : String? = nil)
       json = {
         name:        name,
         permissions: permissions,
@@ -863,7 +863,7 @@ module Discord
         guild_id,
         "PATCH",
         "/guilds/#{guild_id}/roles/#{role_id}",
-        HTTP::Headers{"Content-Type" => "application/json"},
+        HTTP::Headers{"Content-Type" => "application/json", "X-Audit-Log-Reason" => reason},
         json
       )
 
@@ -874,13 +874,13 @@ module Discord
     # to be lower than the bot's highest role.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#delete-guild-role)
-    def delete_guild_role(guild_id : UInt64, role_id : UInt64)
+    def delete_guild_role(guild_id : UInt64, role_id : UInt64, reason : String? = nil)
       response = request(
         :guilds_gid_roles_rid,
         guild_id,
         "DELETE",
         "/guilds/#{guild_id}/roles/#{role_id}",
-        HTTP::Headers.new,
+        HTTP::Headers{"X-Audit-Log-Reason" => reason},
         nil
       )
 
@@ -908,13 +908,13 @@ module Discord
     # *days* days. Requires the "Kick Members" permission.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#begin-guild-prune)
-    def begin_guild_prune(guild_id : UInt64, days : UInt32)
+    def begin_guild_prune(guild_id : UInt64, days : UInt32, reason : String? = nil)
       response = request(
         :guilds_gid_prune,
         guild_id,
         "POST",
         "/guilds/#{guild_id}/prune?days=#{days}",
-        HTTP::Headers.new,
+        HTTP::Headers{"X-Audit-Log-Reason" => reason},
         nil
       )
 
@@ -1234,13 +1234,13 @@ module Discord
     # server.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/invite#delete-invite)
-    def delete_invite(code : String)
+    def delete_invite(code : String, reason : String? = nil)
       response = request(
         :invites_code,
         nil,
         "DELETE",
         "/invites/#{code}",
-        HTTP::Headers.new,
+        HTTP::Headers{"X-Audit-Log-Reason" => reason},
         nil
       )
 
