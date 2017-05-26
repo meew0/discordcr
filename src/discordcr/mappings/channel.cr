@@ -18,10 +18,6 @@ module Discord
       pinned: {type: Bool, nilable: true}
     )
 
-    # A mention contained within a message, constructed by its type,
-    # the snowflake, and it's name if it is an emoji.
-    alias Mention = Tuple(MentionType, UInt64?, String?)
-
     # A hash map of regex describing how mentions are parsed by type
     MENTION_REGEX = {
       MentionType::User     => /<@!?(?<id>\d+)>/,
@@ -32,20 +28,12 @@ module Discord
       MentionType::Here     => /@here/,
     }
 
-    # Returns a map of all mentions contained in the message.
+    # Returns an array of all mentions contained in the message.
     def parse_mentions
-      mentions = {} of MentionType => Array(Mention)
+      mentions = [] of Mention
 
-      {% for typ in {
-                      MentionType::User,
-                      MentionType::Role,
-                      MentionType::Channel,
-                      MentionType::Emoji,
-                      MentionType::Everyone,
-                      MentionType::Here,
-                    } %}
-        mentions[MentionType.new({{typ}})] = parse_mentions(MentionType.new({{typ}}))
-      {% end %}
+      parse_mentions { |m| mentions << m }
+
       mentions
     end
 
@@ -65,6 +53,10 @@ module Discord
       end
     end
   end
+
+  # A mention contained within a message, constructed by its type,
+  # the snowflake, and its name if it is an emoji.
+  record Mention, type : MentionType, id : UInt64?, name : String?
 
   # An enum of the different kinds of Discord mentions
   enum MentionType
