@@ -132,15 +132,15 @@ module Discord
     # permission.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#modify-channel)
-    def modify_channel(channel_id : UInt64, name : String?, position : UInt32?,
-                       topic : String?, bitrate : UInt32?, user_limit : UInt32?)
-      json = {
-        name:       name,
-        position:   position,
-        topic:      topic,
-        bitrate:    bitrate,
+    def modify_channel(channel_id : UInt64, name : String? = nil, position : UInt32? = nil,
+                       topic : String? = nil, bitrate : UInt32? = nil, user_limit : UInt32? = nil)
+      json = ModifyChannelPayload.new(
+        name: name,
+        position: position,
+        topic: topic,
+        bitrate: bitrate,
         user_limit: user_limit,
-      }.to_json
+      ).to_json
 
       response = request(
         :channels_cid,
@@ -577,20 +577,20 @@ module Discord
     # Server" permission.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild)
-    def modify_guild(guild_id : UInt64, name : String?, region : String?,
-                     verification_level : UInt8?, afk_channel_id : UInt64?,
-                     afk_timeout : Int32?, icon : String?, owner_id : UInt64?,
-                     splash : String?)
-      json = {
-        name:               name,
-        region:             region,
+    def modify_guild(guild_id : UInt64, name : String? = nil, region : String? = nil,
+                     verification_level : UInt8? = nil, afk_channel_id : UInt64? = nil,
+                     afk_timeout : Int32? = nil, icon : String? = nil, owner_id : UInt64? = nil,
+                     splash : String? = nil)
+      json = ModifyGuildPayload.new(
+        name: name,
+        region: region,
         verification_level: verification_level,
-        afk_channel_id:     afk_channel_id,
-        afk_timeout:        afk_timeout,
-        icon:               icon,
-        owner_id:           owner_id,
-        splash:             splash,
-      }.to_json
+        afk_channel_id: afk_channel_id,
+        afk_timeout: afk_timeout,
+        icon: icon,
+        owner_id: owner_id,
+        splash: splash,
+      ).to_json
 
       response = request(
         :guilds_gid,
@@ -731,16 +731,16 @@ module Discord
     #    to the new channel when changing voice channel ID.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-member)
-    def modify_guild_member(guild_id : UInt64, user_id : UInt64, nick : String?,
-                            roles : Array(UInt64)?, mute : Bool?, deaf : Bool?,
-                            channel_id : UInt64?)
-      json = {
-        nick:       nick,
-        roles:      roles,
-        mute:       mute,
-        deaf:       deaf,
+    def modify_guild_member(guild_id : UInt64, user_id : UInt64, nick : String? = nil,
+                            roles : Array(UInt64)? = nil, mute : Bool? = nil, deaf : Bool? = nil,
+                            channel_id : UInt64? = nil)
+      json = ModifyGuildMemberPayload.new(
+        nick: nick,
+        roles: roles,
+        mute: mute,
+        deaf: deaf,
         channel_id: channel_id,
-      }.to_json
+      ).to_json
 
       response = request(
         :guilds_gid_members_uid,
@@ -857,16 +857,16 @@ module Discord
     # well as the role to be lower than the bot's highest role.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-role)
-    def modify_guild_role(guild_id : UInt64, role_id : UInt64, name : String?,
-                          permissions : Permissions, colour : UInt32?,
-                          position : Int32?, hoist : Bool?)
-      json = {
-        name:        name,
+    def modify_guild_role(guild_id : UInt64, role_id : UInt64, name : String? = nil,
+                          permissions : Permissions? = nil, colour : UInt32? = nil,
+                          position : Int32? = nil, hoist : Bool? = nil)
+      json = ModifyGuildRolePayload.new(
+        name: name,
         permissions: permissions,
-        color:       colour,
-        position:    position,
-        hoist:       hoist,
-      }.to_json
+        color: colour,
+        position: position,
+        hoist: hoist,
+      ).to_json
 
       response = request(
         :guilds_gid_roles_rid,
@@ -1126,11 +1126,11 @@ module Discord
     # Modifies the current bot user, changing the username and avatar.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/user#modify-current-user)
-    def modify_current_user(username : String, avatar : String)
-      json = {
+    def modify_current_user(username : String? = nil, avatar : String? = nil)
+      json = ModifyCurrentUserPayload.new(
         username: username,
-        avatar:   avatar,
-      }.to_json
+        avatar: avatar,
+      ).to_json
 
       response = request(
         :users_me,
