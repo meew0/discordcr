@@ -18,7 +18,10 @@ module Discord
       discriminator: String,
       avatar: {type: String, nilable: true},
       email: {type: String, nilable: true},
-      bot: {type: Bool, nilable: true}
+      bot: {type: Bool, nilable: true},
+      mfa_enabled: {type: Bool, nilable: true},
+      verified: {type: Bool, nilable: true},
+      phone: {type: String, nilable: true}
     )
   end
 
