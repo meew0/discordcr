@@ -620,6 +620,59 @@ module Discord
       Guild.from_json(response.body)
     end
 
+    # Gets a list of emojis. Will not work for bots (it'll return an empty array).
+    #
+    # There are no available API docs for this method.
+    def get_guild_emojis(guild_id : UInt64)
+      response = request(
+        :guild_gid_emojis,
+        guild_id,
+        "GET",
+        "/guilds/#{guild_id}/emojis",
+        HTTP::Headers.new,
+        nil
+      )
+
+      Array(Emoji).from_json(response.body)
+    end
+
+    # Modifies a guild emoji. Will not work for bots (it'll error with "Unknown Emoji").
+    #
+    # There are no available API docs for this method.
+    def modify_guild_emoji(guild_id : UInt64, emoji_id : UInt64, name : String)
+      response = request(
+        :guilds_gid_emojis,
+        guild_id,
+        "PATCH",
+        "/guilds/#{guild_id}/emojis/#{emoji_id}",
+        HTTP::Headers.new,
+        {name: name}.to_json
+      )
+
+      Emoji.from_json(response.body)
+    end
+
+    # Creates a guild emoji. Will not work for bots (it'll error with "Bots cannot create emojis").
+    #
+    # There are no available API docs for this method.
+    def create_guild_emoji(guild_id : UInt64, name : String, image : String)
+      json = {
+        name:  name,
+        image: image,
+      }.to_json
+
+      response = request(
+        :guild_gid_emojis,
+        guild_id,
+        "POST",
+        "/guilds/#{guild_id}/emojis",
+        HTTP::Headers.new,
+        json
+      )
+
+      Emoji.from_json(response.body)
+    end
+
     # Gets a list of channels in a guild.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-channels)
