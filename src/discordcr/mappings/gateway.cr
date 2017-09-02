@@ -248,6 +248,7 @@ module Discord
     struct GuildMemberUpdatePayload
       JSON.mapping(
         user: User,
+        nick: String?,
         roles: {type: Array(UInt64), converter: SnowflakeArrayConverter},
         guild_id: {type: UInt64, converter: SnowflakeConverter}
       )
