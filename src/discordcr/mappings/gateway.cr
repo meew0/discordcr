@@ -249,7 +249,8 @@ module Discord
       JSON.mapping(
         user: User,
         roles: {type: Array(UInt64), converter: SnowflakeArrayConverter},
-        guild_id: {type: UInt64, converter: SnowflakeConverter}
+        guild_id: {type: UInt64, converter: SnowflakeConverter},
+        nick: String
       )
     end
 
