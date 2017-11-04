@@ -21,7 +21,7 @@ module Discord
 
     # If this is set to any `Cache`, the data in the cache will be updated as
     # the client receives the corresponding gateway dispatches.
-    property cache : Cache?
+    property cache : Nil = nil
 
     # The internal *session* the client is currently using, necessary to create
     # a voice client, for example

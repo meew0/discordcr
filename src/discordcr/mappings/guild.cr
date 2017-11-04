@@ -85,6 +85,13 @@ module Discord
       # Presence updates have no joined_at or deaf/mute, thanks Discord
     end
 
+    # :nodoc:
+    def initialize(payload : Gateway::GuildMemberUpdatePayload)
+      @user = payload.user
+      @nick = payload.nick
+      @roles = payload.roles
+    end
+
     JSON.mapping(
       user: User,
       nick: String?,
@@ -93,6 +100,8 @@ module Discord
       deaf: Bool?,
       mute: Bool?
     )
+
+    delegate id, to: user
   end
 
   struct Integration
