@@ -620,9 +620,9 @@ module Discord
       Guild.from_json(response.body)
     end
 
-    # Gets a list of emojis. Will not work for bots (it'll return an empty array).
+    # Gets a list of emoji on the guild.
     #
-    # There are no available API docs for this method.
+    # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#list-guild-emojis)
     def get_guild_emojis(guild_id : UInt64)
       response = request(
         :guild_gid_emojis,
@@ -636,9 +636,9 @@ module Discord
       Array(Emoji).from_json(response.body)
     end
 
-    # Modifies a guild emoji. Will not work for bots (it'll error with "Unknown Emoji").
+    # Modifies a guild emoji. Requires the "Manage Emojis" permission.
     #
-    # There are no available API docs for this method.
+    # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#modify-guild-emoji)
     def modify_guild_emoji(guild_id : UInt64, emoji_id : UInt64, name : String)
       response = request(
         :guilds_gid_emojis,
@@ -652,9 +652,9 @@ module Discord
       Emoji.from_json(response.body)
     end
 
-    # Creates a guild emoji. Will not work for bots (it'll error with "Bots cannot create emojis").
+    # Creates a guild emoji. Requires the "Manage Emojis" permission.
     #
-    # There are no available API docs for this method.
+    # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#create-guild-emoji)
     def create_guild_emoji(guild_id : UInt64, name : String, image : String)
       json = {
         name:  name,
