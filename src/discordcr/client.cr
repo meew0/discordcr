@@ -28,6 +28,7 @@ module Discord
     getter session : Gateway::Session?
 
     @websocket : Discord::WebSocket
+    @backoff : Float64
 
     # Default analytics properties sent in IDENTIFY
     DEFAULT_PROPERTIES = Gateway::IdentifyProperties.new(
@@ -38,10 +39,10 @@ module Discord
       referring_domain: ""
     )
 
-    # Creates a new bot with the given *token* and *client_id*. Both of these
-    # things can be found on a bot's application page; the token will need to be
-    # revealed using the "click to reveal" thing on the token (**not** the
-    # OAuth2 secret!)
+    # Creates a new bot with the given *token* and optionally the *client_id*.
+    # Both of these things can be found on a bot's application page; the token
+    # will need to be revealed using the "click to reveal" thing on the token
+    # (**not** the OAuth2 secret!)
     #
     # If the *shard* key is set, the gateway will operate in sharded mode. This
     # means that this client's gateway connection will only receive packets from
@@ -63,13 +64,32 @@ module Discord
     # The *properties* define what values are sent to Discord as analytics
     # properties. It's not recommended to change these from the default values,
     # but if you desire to do so, you can.
-    def initialize(@token : String, @client_id : UInt64,
+    def initialize(@token : String, @client_id : UInt64? = nil,
                    @shard : Gateway::ShardKey? = nil,
                    @large_threshold : Int32 = 100,
                    @compress : Bool = false,
                    @properties : Gateway::IdentifyProperties = DEFAULT_PROPERTIES)
       @websocket = initialize_websocket
       @backoff = 1.0
+
+      # Set some default value for the heartbeat interval. This should never
+      # actually be used as a delay between heartbeats because it will have an
+      # actual value before heartbeating starts.
+      @heartbeat_interval = 1000_u32
+      @send_heartbeats = false
+
+      # Initially, this flag is set to true so the client doesn't immediately
+      # try to reconnect at the next heartbeat.
+      @last_heartbeat_acked = true
+
+      setup_heartbeats
+    end
+
+    # Returns this client's ID as provided in its associated Oauth2 application.
+    # A getter for @client_id, this will make a REST call to obtain it
+    # if it was not provided in the initializer.
+    def client_id
+      @client_id ||= get_oauth2_application.id
     end
 
     # Connects this client to the gateway. This is required if the bot needs to
@@ -86,6 +106,7 @@ module Discord
             LOG
         end
 
+        @send_heartbeats = false
         @session.try &.suspend
 
         wait_for_reconnect
@@ -127,6 +148,7 @@ module Discord
       # TODO: make more sophisticated
       LOGGER.warn "Closed with: " + message
 
+      @send_heartbeats = false
       @session.try &.suspend
       nil
     end
@@ -161,6 +183,8 @@ module Discord
             # We got a received heartbeat, reply with the same sequence
             LOGGER.debug "Heartbeat received"
             @websocket.send({op: 1, d: packet.sequence}.to_json)
+          when OP_HEARTBEAT_ACK
+            handle_heartbeat_ack
           else
             LOGGER.warn "Unsupported payload: #{packet}"
           end
@@ -193,7 +217,9 @@ module Discord
     end
 
     private def handle_hello(heartbeat_interval)
-      setup_heartbeats(heartbeat_interval)
+      @heartbeat_interval = heartbeat_interval
+      @send_heartbeats = true
+      @last_heartbeat_acked = true
 
       # If it seems like we can resume, we will - worst case we get an op9
       if @session.try &.should_resume?
@@ -203,15 +229,37 @@ module Discord
       end
     end
 
-    private def setup_heartbeats(heartbeat_interval)
+    private def setup_heartbeats
       spawn do
         loop do
-          LOGGER.debug "Sending heartbeat"
+          if @send_heartbeats
+            unless @last_heartbeat_acked
+              LOGGER.warn "Last heartbeat not acked, reconnecting"
 
-          seq = @session.try &.sequence || 0
-          @websocket.send({op: 1, d: seq}.to_json)
+              # Give the new connection another chance by resetting the last
+              # acked flag; otherwise it would try to reconnect again at the
+              # first heartbeat
+              @last_heartbeat_acked = true
 
-          sleep heartbeat_interval.milliseconds
+              reconnect(should_suspend: true)
+              next
+            end
+
+            LOGGER.debug "Sending heartbeat"
+
+            begin
+              seq = @session.try &.sequence || 0
+              @websocket.send({op: 1, d: seq}.to_json)
+              @last_heartbeat_acked = false
+            rescue ex
+              LOGGER.error <<-LOG
+                Heartbeat failed!
+                #{ex}
+                LOG
+            end
+          end
+
+          sleep @heartbeat_interval.milliseconds
         end
       end
     end
@@ -236,13 +284,28 @@ module Discord
       @websocket.send(packet.to_json)
     end
 
+    # Reconnects the websocket connection entirely. If *should_suspend* is set,
+    # the session will be suspended, which means (unless other factors prevent
+    # this) that the session will be resumed after reconnection. If
+    # *backoff_override* is set to anything other than `nil`, the reconnection
+    # backoff will not use the standard formula and instead wait the value
+    # provided; use `0.0` to skip waiting entirely.
+    def reconnect(should_suspend = false, backoff_override = nil)
+      @backoff = backoff_override if backoff_override
+      @send_heartbeats = false
+      @websocket.close
+
+      # Suspend the session so we resume, if desired
+      @session.try &.suspend if should_suspend
+    end
+
     # Sends a status update to Discord. The *status* can be `"online"`,
     # `"idle"`, `"dnd"`, or `"invisible"`. Setting the *game* to a `GamePlaying`
     # object makes the bot appear as playing some game on Discord. *since* and
     # *afk* can be used in conjunction to signify to Discord that the status
     # change is due to inactivity on the bot's part – this fulfills no cosmetic
     # purpose.
-    def status_update(status : String? = nil, game : GamePlaying? = nil, afk : Bool = false, since : Int64 = 0_i64)
+    def status_update(status : String? = nil, game : GamePlaying? = nil, afk : Bool = false, since : Int64? = nil)
       packet = Gateway::StatusUpdatePacket.new(status, game, afk, since)
       @websocket.send(packet.to_json)
     end
@@ -368,6 +431,11 @@ module Discord
           @cache.try &.add_guild_role(guild.id, role.id)
         end
 
+        payload.members.each do |member|
+          cache member.user
+          @cache.try &.cache(member, guild.id)
+        end
+
         call_event guild_create, payload
       when "GUILD_UPDATE"
         payload = Guild.from_json(data)
@@ -407,7 +475,7 @@ module Discord
         cache payload.user
         @cache.try do |c|
           member = c.resolve_member(payload.guild_id, payload.user.id)
-          new_member = GuildMember.new(member, payload.roles)
+          new_member = GuildMember.new(member, payload.roles, payload.nick)
           c.cache(new_member, payload.guild_id)
         end
 
@@ -494,18 +562,19 @@ module Discord
     end
 
     private def handle_reconnect
-      # Close the websocket - the reconnection logic will kick in. We want this
-      # to happen instantly so set the backoff to 0 seconds
-      @backoff = 0.0
-      @websocket.close
-
-      # Suspend the session so we 1. resume and 2. don't send heartbeats
-      @session.try &.suspend
+      # We want the reconnection to happen instantly, and we want a resume to be
+      # attempted, so set the respective parameters
+      reconnect(should_suspend: true, backoff_override: 0.0)
     end
 
     private def handle_invalid_session
       @session.try &.invalidate
       identify
+    end
+
+    private def handle_heartbeat_ack
+      LOGGER.debug "Heartbeat ACK received"
+      @last_heartbeat_acked = true
     end
 
     # :nodoc:
