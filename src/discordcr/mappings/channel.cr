@@ -3,19 +3,20 @@ require "./converters"
 module Discord
   struct Message
     JSON.mapping(
-      type: {type: UInt8, nilable: true},
+      type: UInt8?,
       content: String,
       id: {type: UInt64, converter: SnowflakeConverter},
       channel_id: {type: UInt64, converter: SnowflakeConverter},
       author: User,
-      timestamp: {type: Time, converter: DATE_FORMAT},
+      timestamp: {type: Time, converter: TimestampConverter},
       tts: Bool,
       mention_everyone: Bool,
       mentions: Array(User),
       mention_roles: {type: Array(UInt64), converter: SnowflakeArrayConverter},
       attachments: Array(Attachment),
       embeds: Array(Embed),
-      pinned: {type: Bool, nilable: true}
+      pinned: Bool?,
+      reactions: Array(Reaction)?
     )
   end
 
@@ -32,14 +33,19 @@ module Discord
       id: {type: UInt64, converter: SnowflakeConverter},
       type: UInt8,
       guild_id: {type: UInt64?, converter: MaybeSnowflakeConverter},
-      name: {type: String, nilable: true},
-      is_private: {type: Bool, nilable: true},
-      permission_overwrites: {type: Array(Overwrite), nilable: true},
-      topic: {type: String, nilable: true},
+      name: String?,
+      permission_overwrites: Array(Overwrite)?,
+      topic: String?,
       last_message_id: {type: UInt64?, converter: MaybeSnowflakeConverter},
-      bitrate: {type: UInt32, nilable: true},
-      user_limit: {type: UInt32, nilable: true},
-      recipients: {type: Array(User), nilable: true}
+      bitrate: UInt32?,
+      user_limit: UInt32?,
+      recipients: Array(User)?,
+      nsfw: Bool?,
+      icon: Bool?,
+      owner_id: {type: UInt64?, converter: MaybeSnowflakeConverter},
+      application_id: {type: UInt64?, converter: MaybeSnowflakeConverter},
+      position: Int32?,
+      parent_id: {type: UInt64?, converter: MaybeSnowflakeConverter}
     )
   end
 
@@ -61,6 +67,14 @@ module Discord
     )
   end
 
+  struct Reaction
+    JSON.mapping(
+      emoji: ReactionEmoji,
+      count: UInt32,
+      me: Bool
+    )
+  end
+
   struct ReactionEmoji
     JSON.mapping(
       id: {type: UInt64?, converter: MaybeSnowflakeConverter},
@@ -78,19 +92,19 @@ module Discord
     end
 
     JSON.mapping(
-      title: {type: String, nilable: true},
+      title: String?,
       type: String,
-      description: {type: String, nilable: true},
+      description: String?,
       url: String?,
-      timestamp: {type: Time, converter: EmbedTimestampConverter, nilable: true},
-      colour: {type: UInt32, key: "color", nilable: true},
-      footer: {type: EmbedFooter, nilable: true},
-      image: {type: EmbedImage, nilable: true},
-      thumbnail: {type: EmbedThumbnail, nilable: true},
-      video: {type: EmbedVideo, nilable: true},
-      provider: {type: EmbedProvider, nilable: true},
-      author: {type: EmbedAuthor, nilable: true},
-      fields: {type: Array(EmbedField), nilable: true}
+      timestamp: {type: Time?, converter: EmbedTimestampConverter},
+      colour: {type: UInt32?, key: "color"},
+      footer: EmbedFooter?,
+      image: EmbedImage?,
+      thumbnail: EmbedThumbnail?,
+      video: EmbedVideo?,
+      provider: EmbedProvider?,
+      author: EmbedAuthor?,
+      fields: Array(EmbedField)?
     )
 
     {% unless flag?(:correct_english) %}
@@ -135,7 +149,7 @@ module Discord
   struct EmbedProvider
     JSON.mapping(
       name: String,
-      url: {type: String, nilable: true}
+      url: String?
     )
   end
 
@@ -180,8 +194,8 @@ module Discord
       size: UInt32,
       url: String,
       proxy_url: String,
-      height: {type: UInt32, nilable: true},
-      width: {type: UInt32, nilable: true}
+      height: UInt32?,
+      width: UInt32?
     )
   end
 end
