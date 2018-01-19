@@ -87,4 +87,11 @@ describe Discord do
       obj.data[2].should eq 10000000000
     end
   end
+
+  describe Discord::WebSocket::Packet do
+    it "inspects" do
+      packet = Discord::WebSocket::Packet.new(0_i64, 1_i64, IO::Memory.new("foo"), "test")
+      packet.inspect.should eq %(Discord::WebSocket::Packet(@opcode=0_i64 @sequence=1_i64 @data="foo" @event_type="test"))
+    end
+  end
 end
