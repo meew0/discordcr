@@ -8,9 +8,9 @@ module Discord
       time_str = parser.read_string
 
       begin
-        Time::Format.new("%FT%T.%L%:z", Time::Kind::Utc).parse(time_str)
+        Time::Format.new("%FT%T.%L%:z", Time::Location::UTC).parse(time_str)
       rescue Time::Format::Error
-        Time::Format.new("%FT%T%:z", Time::Kind::Utc).parse(time_str)
+        Time::Format.new("%FT%T%:z", Time::Location::UTC).parse(time_str)
       end
     end
   end
