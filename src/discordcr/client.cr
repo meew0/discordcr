@@ -27,6 +27,9 @@ module Discord
     # a voice client, for example
     getter session : Gateway::Session?
 
+    # Used if operating in sharded mode.
+    property shard : Gateway::ShardKey?
+
     @websocket : Discord::WebSocket
     @backoff : Float64
 
@@ -65,7 +68,7 @@ module Discord
     # properties. It's not recommended to change these from the default values,
     # but if you desire to do so, you can.
     def initialize(@token : String, @client_id : UInt64? = nil,
-                   @shard : Gateway::ShardKey? = nil,
+                   @shard : Gateway::ShardKey? = {shard_id: 0, num_shards: 1},
                    @large_threshold : Int32 = 100,
                    @compress : Bool = false,
                    @properties : Gateway::IdentifyProperties = DEFAULT_PROPERTIES)
