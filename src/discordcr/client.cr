@@ -81,8 +81,6 @@ module Discord
       # Initially, this flag is set to true so the client doesn't immediately
       # try to reconnect at the next heartbeat.
       @last_heartbeat_acked = true
-
-      setup_heartbeats
     end
 
     # Returns this client's ID as provided in its associated Oauth2 application.
@@ -96,6 +94,7 @@ module Discord
     # do anything beyond making REST API calls. Calling this method will block
     # execution until the bot is forcibly stopped.
     def run
+      setup_heartbeats
       loop do
         begin
           @websocket.run
