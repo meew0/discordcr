@@ -167,7 +167,7 @@ module Discord
     # Gets a channel by ID.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#get-channel)
-    def get_channel(channel_id : UInt64 | Snowflake)
+    def get_channel(channel_id : UInt64 | Snowflake, cached : Bool = false)
       response = request(
         :channels_cid,
         channel_id,
@@ -613,7 +613,7 @@ module Discord
     # Gets a guild by ID.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild)
-    def get_guild(guild_id : UInt64 | Snowflake)
+    def get_guild(guild_id : UInt64 | Snowflake, cached : Bool = false)
       response = request(
         :guilds_gid,
         guild_id,
@@ -818,7 +818,7 @@ module Discord
     # Gets a specific member by both IDs.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-member)
-    def get_guild_member(guild_id : UInt64 | Snowflake, user_id : UInt64 | Snowflake)
+    def get_guild_member(guild_id : UInt64 | Snowflake, user_id : UInt64 | Snowflake, cached : Bool = false)
       response = request(
         :guilds_gid_members_uid,
         guild_id,
@@ -1290,7 +1290,7 @@ module Discord
     # Gets a specific user by ID.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/user#get-user)
-    def get_user(user_id : UInt64 | Snowflake)
+    def get_user(user_id : UInt64 | Snowflake, cached : Bool = false)
       response = request(
         :users_uid,
         nil,
