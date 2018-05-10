@@ -19,6 +19,51 @@ module Discord
 
     property guild_channel_cache : Cache(UInt64, Array(UInt64)) = NullCache(UInt64, Array(UInt64)).new
 
+    class CacheConfigurator
+      getter __client
+
+      def initialize(@__client : CachedClient)
+      end
+
+      macro option(name, key, value)
+        macro {{name}}(cache_type)
+          \{% if cache_type.is_a?(Path) %}
+            __client.{{name}} = \{{cache_type}}({{key}}, {{value}}).new
+          \{% elsif cache_type.is_a?(Call) && cache_type.receiver %}
+            \{% call = cache_type %}
+            __client.{{name}} = \{{call.receiver}}({{key}}, {{value}}).\{{call.name}}(\{{call.args.join(",")}})
+          \{% else %}
+            __client.{{name}} = \{{cache_type}}
+          \{% end %}
+        end
+      end
+
+      macro all_caches(cache_type)
+        user_cache({{cache_type}})
+        guild_cache({{cache_type}})
+        guild_member_cache({{cache_type}})
+        channel_cache({{cache_type}})
+        role_cache({{cache_type}})
+        dm_channel_cache({{cache_type}})
+      end
+
+      option user_cache, UInt64, ::Discord::User
+
+      option guild_cache, UInt64, ::Discord::Guild
+
+      option guild_member_cache, Tuple(UInt64, UInt64), ::Discord::GuildMember
+
+      option channel_cache, UInt64, ::Discord::Channel
+
+      option role_cache, UInt64, ::Discord::Role
+
+      option dm_channel_cache, UInt64, UInt64
+    end
+
+    def configure_caches
+      with CacheConfigurator.new(self) yield
+    end
+
     def initialize(@token : String, @client_id : UInt64? = nil,
                    @shard : Gateway::ShardKey? = nil,
                    @large_threshold : Int32 = 100,

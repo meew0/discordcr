@@ -1,5 +1,3 @@
-require "./mappings/*"
-
 module Discord
   abstract class Cache(K, V)
     class Error < Exception

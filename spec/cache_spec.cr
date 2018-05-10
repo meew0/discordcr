@@ -1,8 +1,6 @@
 require "./spec_helper"
 
-class TestCache < Discord::Cache(Int32, String)
-  include Discord::MemoryCache(Int32, String)
-end
+alias TestCache = Discord::MemoryCache(Int32, String)
 
 describe Discord::MemoryCache do
   it "caches and recalls values" do

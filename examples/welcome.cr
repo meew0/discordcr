@@ -4,7 +4,9 @@ require "../src/discordcr"
 
 # Make sure to replace this fake data with actual data when running.
 client = Discord::CachedClient.new(token: "Bot MjI5NDU5NjgxOTU1NjUyMzM3.Cpnz31.GQ7K9xwZtvC40y8MPY3eTqjEIXm", client_id: 229459681955652337_u64)
-client.guild_cache = Discord::MemoryCache(UInt64, Discord::Guild).new
+client.configure_caches do
+  guild_cache Discord::MemoryCache
+end
 
 client.on_guild_member_add do |payload|
   # get the guild/server information
