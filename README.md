@@ -1,4 +1,4 @@
-[![docs](https://img.shields.io/badge/docs-latest-green.svg?style=flat-square)](https://meew0.github.io/discordcr/doc/v0.1.0/)
+[![docs](https://img.shields.io/badge/docs-latest-green.svg)](https://meew0.github.io/discordcr/doc/v0.3.0/)
 
 # discordcr
 
@@ -34,9 +34,7 @@ dependencies:
 
 ## Usage
 
-An example bot can be found
-[here](https://github.com/meew0/discordcr/blob/master/examples/ping.cr). More
-examples will come in the future.
+Example bots can be found [here](https://github.com/meew0/discordcr/tree/master/examples/).
 
 A short overview of library structure: the `Client` class includes the `REST`
 module, which handles the REST parts of Discord's API; the `Client` itself
@@ -71,8 +69,7 @@ user = cache.resolve_user(66237334693085184_u64) # won't do a request to Discord
 puts user.username
 ```
 
-Apart from this, API documentation is also available, at
-https://meew0.github.io/discordcr/doc/v0.1.0/.
+Apart from this, API documentation is also available, at https://meew0.github.io/discordcr/doc/v0.3.0/.
 
 ## Contributing
 
