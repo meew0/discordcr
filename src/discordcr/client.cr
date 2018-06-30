@@ -164,7 +164,14 @@ module Discord
 
     private def on_close(message : String)
       # TODO: make more sophisticated
-      @logger.warn "[#{@client_name}] Closed with: " + message
+      code = nil
+      reason = nil
+      unless message.empty?
+        io = IO::Memory.new(message)
+        code = io.read_bytes(UInt16, IO::ByteFormat::NetworkEndian)
+        reason = io.gets_to_end
+      end
+      @logger.warn "[#{@client_name}] Closed with: #{code} #{reason}"
 
       @send_heartbeats = false
       @session.try &.suspend
