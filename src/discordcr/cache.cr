@@ -17,17 +17,21 @@ module Discord
 
     abstract def remove(key : K)
 
-    abstract def each(&block : V ->)
+    abstract def each(&block : Tuple(K, V) ->)
   end
 
   class MemoryCache(K, V) < Cache(K, V)
-    include Enumerable(V)
+    include Enumerable(Tuple(K, V))
 
     def initialize
       @cache = {} of K => V
     end
 
-    delegate each, to: @cache
+    def each(&block : Tuple(K, V) ->)
+      @cache.each do |key, value|
+        yield({key, value})
+      end
+    end
 
     def resolve?(key : K)
       @cache[key]?
@@ -55,7 +59,7 @@ module Discord
       nil
     end
 
-    def each(&block : V ->)
+    def each(&block : Tuple(K, V) ->)
       nil
     end
   end
