@@ -27,7 +27,7 @@ module Discord
       @cache = {} of K => V
     end
 
-    def each(&block : Tuple(K, V) ->)
+    def each
       @cache.each do |key, value|
         yield({key, value})
       end
