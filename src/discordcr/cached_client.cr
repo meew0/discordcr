@@ -3,21 +3,21 @@ require "./cache"
 
 module Discord
   class CachedClient < Client
-    property user_cache : Cache(UInt64, User) = NullCache(UInt64, User).new
+    property user_cache : Cache(Snowflake, User) = NullCache(Snowflake, User).new
 
-    property guild_cache : Cache(UInt64, Guild) = NullCache(UInt64, Guild).new
+    property guild_cache : Cache(Snowflake, Guild) = NullCache(Snowflake, Guild).new
 
-    property guild_member_cache : Cache(Tuple(UInt64, UInt64), GuildMember) = NullCache(Tuple(UInt64, UInt64), GuildMember).new
+    property guild_member_cache : Cache(Tuple(Snowflake, Snowflake), GuildMember) = NullCache(Tuple(Snowflake, Snowflake), GuildMember).new
 
-    property channel_cache : Cache(UInt64, Channel) = NullCache(UInt64, Channel).new
+    property channel_cache : Cache(Snowflake, Channel) = NullCache(Snowflake, Channel).new
 
-    property role_cache : Cache(UInt64, Role) = NullCache(UInt64, Role).new
+    property role_cache : Cache(Snowflake, Role) = NullCache(Snowflake, Role).new
 
-    property dm_channel_cache : Cache(UInt64, UInt64) = NullCache(UInt64, UInt64).new
+    property dm_channel_cache : Cache(Snowflake, Snowflake) = NullCache(Snowflake, Snowflake).new
 
-    property guild_role_cache : Cache(UInt64, Array(UInt64)) = NullCache(UInt64, Array(UInt64)).new
+    property guild_role_cache : Cache(Snowflake, Array(Snowflake)) = NullCache(Snowflake, Array(Snowflake)).new
 
-    property guild_channel_cache : Cache(UInt64, Array(UInt64)) = NullCache(UInt64, Array(UInt64)).new
+    property guild_channel_cache : Cache(Snowflake, Array(Snowflake)) = NullCache(Snowflake, Array(Snowflake)).new
 
     class CacheConfigurator
       getter __client
@@ -47,17 +47,17 @@ module Discord
         dm_channel_cache({{cache_type}})
       end
 
-      option user_cache, UInt64, ::Discord::User
+      option user_cache, ::Discord::Snowflake, ::Discord::User
 
-      option guild_cache, UInt64, ::Discord::Guild
+      option guild_cache, ::Discord::Snowflake, ::Discord::Guild
 
-      option guild_member_cache, Tuple(UInt64, UInt64), ::Discord::GuildMember
+      option guild_member_cache, Tuple(::Discord::Snowflake, ::Discord::Snowflake), ::Discord::GuildMember
 
-      option channel_cache, UInt64, ::Discord::Channel
+      option channel_cache, ::Discord::Snowflake, ::Discord::Channel
 
-      option role_cache, UInt64, ::Discord::Role
+      option role_cache, ::Discord::Snowflake, ::Discord::Role
 
-      option dm_channel_cache, UInt64, UInt64
+      option dm_channel_cache, ::Discord::Snowflake, ::Discord::Snowflake
     end
 
     def configure_caches
@@ -73,7 +73,8 @@ module Discord
       initialize_handlers
     end
 
-    def get_user(id : UInt64, cached : Bool = true)
+    def get_user(id : UInt64 | Snowflake, cached : Bool = true)
+      id = Snowflake.new(id) if id.is_a?(UInt64)
       if cached
         user_cache.fetch(id) { super(id) }
       else
@@ -82,7 +83,8 @@ module Discord
       end
     end
 
-    def get_guild(id : UInt64, cached : Bool = true)
+    def get_guild(id : UInt64 | Snowflake, cached : Bool = true)
+      id = Snowflake.new(id) if id.is_a?(UInt64)
       if cached
         guild_cache.fetch(id) { super(id) }
       else
@@ -91,7 +93,9 @@ module Discord
       end
     end
 
-    def get_guild_member(guild_id : UInt64, user_id : UInt64, cached : Bool = true)
+    def get_guild_member(guild_id : UInt64 | Snowflake, user_id : UInt64 | Snowflake, cached : Bool = true)
+      guild_id = Snowflake.new(guild_id) if guild_id.is_a?(UInt64)
+      user_id = Snowflake.new(user_id) if user_id.is_a?(UInt64)
       if cached
         guild_member_cache.fetch({guild_id, user_id}) do
           super(guild_id, user_id)
@@ -102,7 +106,8 @@ module Discord
       end
     end
 
-    def get_channel(id : UInt64, cached : Bool = true)
+    def get_channel(id : UInt64 | Snowflake, cached : Bool = true)
+      id = Snowflake.new(id) if id.is_a?(UInt64)
       if cached
         channel_cache.fetch(id) { super(id) }
       else
@@ -129,12 +134,12 @@ module Discord
         payload.channels.each do |channel|
           channel.guild_id = payload.id
           channel_cache.cache(channel.id, channel)
-          guild_channel_cache.fetch(payload.id) { Array(UInt64).new }.push(channel.id)
+          guild_channel_cache.fetch(payload.id) { Array(Snowflake).new }.push(channel.id)
         end
 
         payload.roles.each do |role|
           role_cache.cache(role.id, role)
-          guild_role_cache.fetch(payload.id) { Array(UInt64).new }.push(role.id)
+          guild_role_cache.fetch(payload.id) { Array(Snowflake).new }.push(role.id)
         end
 
         payload.members.each do |member|
@@ -148,7 +153,7 @@ module Discord
         guild_id = channel.guild_id
         recipients = channel.recipients
         if guild_id
-          guild_channel_cache.fetch(guild_id) { Array(UInt64).new }.push(channel.id)
+          guild_channel_cache.fetch(guild_id) { Array(Snowflake).new }.push(channel.id)
         elsif channel.type.dm? && recipients
           dm_channel_cache.cache(channel.id, recipients[0].id)
         end
@@ -203,7 +208,7 @@ module Discord
 
       on_guild_role_create do |payload|
         role_cache.cache(payload.guild_id, payload.role)
-        guild_role_cache.fetch(payload.guild_id) { Array(UInt64).new }.push(payload.role.id)
+        guild_role_cache.fetch(payload.guild_id) { Array(Snowflake).new }.push(payload.role.id)
       end
 
       on_guild_role_update do |payload|
