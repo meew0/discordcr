@@ -122,8 +122,8 @@ client.on_voice_server_update do |payload|
       client.create_message(connect_channel_id.not_nil!, "Voice connected.")
     end
     vc.run
-  rescue e
-    e.inspect_with_backtrace(STDOUT)
+  rescue ex
+    ex.inspect_with_backtrace(STDOUT)
   end
 end
 

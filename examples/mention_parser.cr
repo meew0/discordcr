@@ -9,31 +9,31 @@ client = Discord::Client.new(token: "Bot MjI5NDU5NjgxOTU1NjUyMzM3.Cpnz31.GQ7K9xw
 client.on_message_create do |payload|
   next unless payload.content.starts_with?("parse:")
 
-  mentions = String.build do |string|
+  mentions = String.build do |io|
     index = 0
     Discord::Mention.parse(payload.content) do |mention|
       index += 1
-      string << "`[" << index << " @ " << mention.start << "]` "
+      io << "`[" << index << " @ " << mention.start << "]` "
       case mention
       when Discord::Mention::User
-        string.puts "**User:** #{mention.id}"
+        io.puts "**User:** #{mention.id}"
       when Discord::Mention::Role
-        string.puts "**Role:** #{mention.id}"
+        io.puts "**Role:** #{mention.id}"
       when Discord::Mention::Channel
-        string.puts "**Channel:** #{mention.id}"
+        io.puts "**Channel:** #{mention.id}"
       when Discord::Mention::Emoji
-        string << "**Emoji:** #{mention.name} #{mention.id}"
-        string << " (animated)" if mention.animated
-        string.puts
+        io << "**Emoji:** #{mention.name} #{mention.id}"
+        io << " (animated)" if mention.animated
+        io.puts
       when Discord::Mention::Everyone
-        string.puts "**Everyone**"
+        io.puts "**Everyone**"
       when Discord::Mention::Here
-        string.puts "**Here**"
+        io.puts "**Here**"
       end
     end
   end
 
-  mentions = "no mentions found in your message" if mentions.empty?
+  mentions = "No mentions found in your message" if mentions.empty?
 
   begin
     client.create_message(

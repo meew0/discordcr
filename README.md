@@ -34,8 +34,8 @@ dependencies:
 
 ## Usage
 
-An example bot can be found
-[here](https://github.com/meew0/discordcr/blob/master/examples/ping.cr). More
+Example bots can be found
+[here](https://github.com/meew0/discordcr/blob/master/examples/). More
 examples will come in the future.
 
 A short overview of library structure: the `Client` class includes the `REST`
@@ -72,7 +72,7 @@ puts user.username
 ```
 
 Apart from this, API documentation is also available, at
-https://meew0.github.io/discordcr/doc/v0.1.0/.
+https://meew0.github.io/discordcr/doc/v0.4.0/.
 
 ## Contributing
 
