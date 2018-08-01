@@ -37,7 +37,7 @@ module Discord
 
     # Store an object in this class. The object must be a `class`.
     def put(extension : T) forall T
-      {% raise "Extension must be a class" unless T < Reference %}
+      {% raise "Extension #{T} must be a class" unless T < Reference %}
       raise "BUG: Reference isn't sizeof(Void*)!" unless sizeof(typeof(extension)) == sizeof(Void*)
       @extensions[extension.class.crystal_type_id] = extension.unsafe_as(Pointer(Void))
     end
