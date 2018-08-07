@@ -47,8 +47,8 @@ describe Discord::REST do
     end
 
     it "#delete_message" do
-      Discord::MockServer.prepare_endpoint("DELETE", "/channels/1/messages/2", 204,
-        {"Content-Type" => "application/json"}, "")
+      Discord::MockServer.prepare_endpoint(
+        "DELETE", "/channels/1/messages/2", 204, nil, "")
       client.delete_message(1, 2)
     end
   {% end %}

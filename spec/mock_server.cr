@@ -5,7 +5,7 @@ require "logger"
 # TODO: docs
 class Discord::MockServer
   record(Endpoint, method : String, path : String, status_code : Int32,
-    headers : Hash(String, String), body : String) do
+    headers : Hash(String, String)?, body : String) do
     include JSON::Serializable
 
     def id
@@ -88,7 +88,7 @@ class Discord::MockServer
   end
 
   private def respond_endpoint(endpoint, response)
-    endpoint.headers.each do |key, value|
+    endpoint.headers.try &.each do |key, value|
       response.headers.add(key, value)
     end
     response.status_code = endpoint.status_code
