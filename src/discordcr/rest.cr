@@ -9,9 +9,15 @@ require "./errors"
 
 module Discord
   module REST
-    SSL_CONTEXT = OpenSSL::SSL::Context::Client.new
-    USER_AGENT  = "DiscordBot (https://github.com/meew0/discordcr, #{Discord::VERSION})"
-    API_BASE    = "https://discordapp.com/api/v6"
+    USER_AGENT = "DiscordBot (https://github.com/meew0/discordcr, #{Discord::VERSION})"
+
+    {% unless flag?(:mock_server) %}
+      API_BASE = "https://discordapp.com/api/v6"
+      SSL_CONTEXT = OpenSSL::SSL::Context::Client.new
+    {% else %}
+      API_BASE = "http://localhost:8080"
+      SSL_CONTEXT = nil
+    {% end %}
 
     alias RateLimitKey = {route_key: Symbol, major_parameter: UInt64?}
 
