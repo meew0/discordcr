@@ -1,6 +1,6 @@
 language: crystal
 script:
-  - crystal spec
+  - bash ./spec_runner.sh
   - crystal tool format --check
   - find examples -name "*.cr" | xargs -L 1 crystal build --no-codegen
   - bash ./deploy.sh
