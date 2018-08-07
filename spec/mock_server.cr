@@ -4,12 +4,12 @@ require "logger"
 
 # TODO: docs
 class Discord::MockServer
-  record(Endpoint, method : String, path : String, status_code : Int32,
+  record(Endpoint, method : String, resource : String, status_code : Int32,
     headers : Hash(String, String)?, body : String) do
     include JSON::Serializable
 
     def id
-      {method, path}
+      {method, resource}
     end
   end
 
@@ -39,11 +39,11 @@ class Discord::MockServer
   def handle(context : HTTP::Server::Context)
     log(context.request)
     request, response = context.request, context.response
-    route = {request.method, request.path}
+    route = {request.method, request.resource}
     handled = false
 
     begin
-      case {request.method, request.path}
+      case route
       when {"GET", "/_endpoints"}
         respond_json(@endpoints.values.to_json, 200, response)
         handled = true
@@ -77,7 +77,7 @@ class Discord::MockServer
   end
 
   private def log(request : HTTP::Request)
-    @logger.info("[IN] #{request.method} #{request.path}")
+    @logger.info("[IN] #{request.method} #{request.resource}")
   end
 
   private def respond_json(body, status_code, response)

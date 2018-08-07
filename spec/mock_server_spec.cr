@@ -35,6 +35,17 @@ describe Discord::MockServer do
     response.body.should eq json
   end
 
+  it "identifies endpoints by resource" do
+    server.add("GET", "/ping?v=1", 200, {"Content-Type" => "text/plain"}, "foo")
+    server.add("GET", "/ping?v=2", 200, {"Content-Type" => "text/plain"}, "bar")
+
+    response_a = run_request(on: server, with: HTTP::Request.new("GET", "/ping?v=1"))
+    response_a.body.should eq "foo"
+
+    response_b = run_request(on: server, with: HTTP::Request.new("GET", "/ping?v=2"))
+    response_b.body.should eq "bar"
+  end
+
   it "responds with 404 on missing route" do
     request = HTTP::Request.new("GET", "/unknown")
     response = run_request(on: server, with: request)
