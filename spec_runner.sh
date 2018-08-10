@@ -3,6 +3,7 @@
 # Compile and run the mock server target
 shards build
 bin/mock_server run &
+server_pid=$!
 
 # Wait for the server to come online
 for i in {1..10}; do
@@ -14,7 +15,7 @@ crystal spec -Dmock_server
 exit_code=$?
 
 # Stop mock server
-pkill -f bin/mock_server
+kill $server_pid
 
 # Return specs exit code
 exit $exit_code
