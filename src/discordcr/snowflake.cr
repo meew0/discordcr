@@ -53,6 +53,10 @@ module Discord
     def <=>(int : UInt64)
       value <=> int
     end
+
+    def >>(count : Int)
+      value >> int
+    end
   end
 end
 
