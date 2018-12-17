@@ -765,6 +765,20 @@ module Discord
       Emoji.from_json(response.body)
     end
 
+    # Deletes a guild emoji. Requires the "Manage Emojis" permission.
+    #
+    # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#delete-guild-emoji)
+    def delete_guild_emoji(guild_id : UInt64 | Snowflake, emoji_id : UInt64 | Snowflake)
+      request(
+        :guilds_gid_emojis_eid,
+        guild_id,
+        "DELETE",
+        "/guilds/#{guild_id}/emojis/#{emoji_id}",
+        HTTP::Headers.new,
+        nil
+      )
+    end
+
     # Gets a list of channels in a guild.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-channels)
