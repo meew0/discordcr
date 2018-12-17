@@ -699,7 +699,7 @@ module Discord
     # Gets a list of emoji on the guild.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#list-guild-emojis)
-    def get_guild_emojis(guild_id : UInt64 | Snowflake)
+    def list_guild_emojis(guild_id : UInt64 | Snowflake)
       response = request(
         :guild_gid_emojis,
         guild_id,
