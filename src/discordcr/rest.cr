@@ -712,6 +712,22 @@ module Discord
       Array(Emoji).from_json(response.body)
     end
 
+    # Gets a specific emoji by guild ID and emoji ID.
+    #
+    # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#get-guild-emoji)
+    def get_guild_emoji(guild_id : UInt64 | Snowflake, emoji_id : UInt64 | Snowflake)
+      response = request(
+        :guilds_gid_emojis_eid,
+        guild_id,
+        "GET",
+        "/guilds/#{guild_id}/emojis/#{emoji_id}",
+        HTTP::Headers.new,
+        nil
+      )
+
+      Emoji.from_json(response.body)
+    end
+
     # Modifies a guild emoji. Requires the "Manage Emojis" permission.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#modify-guild-emoji)
