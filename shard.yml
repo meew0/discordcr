@@ -6,4 +6,8 @@ authors:
   - Chris Hobbs (RX14) <chris@rx14.co.uk>
   - z64 <zachnowicki@gmail.com>
 
+targets:
+  mock_server:
+    main: spec/mock_server.cr
+
 license: MIT
