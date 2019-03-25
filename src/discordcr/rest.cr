@@ -721,7 +721,7 @@ module Discord
         guild_id,
         "PATCH",
         "/guilds/#{guild_id}/emojis/#{emoji_id}",
-        HTTP::Headers.new,
+        HTTP::Headers{"Content-Type" => "application/json"},
         {name: name}.to_json
       )
 
@@ -742,7 +742,7 @@ module Discord
         guild_id,
         "POST",
         "/guilds/#{guild_id}/emojis",
-        HTTP::Headers.new,
+        HTTP::Headers{"Content-Type" => "application/json"},
         json
       )
 
@@ -816,7 +816,7 @@ module Discord
         guild_id,
         "PATCH",
         "/guilds/#{guild_id}/vanity-url",
-        HTTP::Headers.new,
+        HTTP::Headers{"Content-Type" => "application/json"},
         {code: code}.to_json
       )
     end
@@ -1117,7 +1117,7 @@ module Discord
         guild_id,
         "POST",
         "/guilds/#{guild_id}/roles",
-        HTTP::Headers.new,
+        HTTP::Headers{"Content-Type" => "application/json"},
         json
       )
 
@@ -1193,7 +1193,7 @@ module Discord
         guild_id,
         "POST",
         "/guilds/#{guild_id}/prune?days=#{days}",
-        HTTP::Headers.new,
+        HTTP::Headers{"Content-Type" => "application/json"},
         nil
       )
 
@@ -1301,7 +1301,7 @@ module Discord
         guild_id,
         "POST",
         "/guilds/#{guild_id}/integrations/#{integration_id}/sync",
-        HTTP::Headers.new,
+        HTTP::Headers{"Content-Type" => "application/json"},
         nil
       )
     end
