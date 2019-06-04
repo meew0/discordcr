@@ -14,6 +14,7 @@ module Discord
       @afk_channel_id = payload.afk_channel_id
       @afk_timeout = payload.afk_timeout
       @verification_level = payload.verification_level
+      @premium_tier = payload.premium_tier
       @roles = payload.roles
       @emoji = payload.emoji
       @features = payload.features
@@ -35,6 +36,8 @@ module Discord
       embed_enabled: Bool?,
       embed_channel_id: Snowflake?,
       verification_level: UInt8,
+      premium_tier: UInt8,
+      premium_subscription_count: UInt8?,
       roles: Array(Role),
       emoji: {type: Array(Emoji), key: "emojis"},
       features: Array(String),
@@ -91,6 +94,7 @@ module Discord
       @roles = partial_member.roles
       @nick = partial_member.nick
       @joined_at = partial_member.joined_at
+      @premium_since = partial_member.premium_since
       @mute = partial_member.mute
       @deaf = partial_member.deaf
     end
@@ -108,6 +112,7 @@ module Discord
       @nick = payload.nick
       @roles = payload.roles
       @joined_at = payload.joined_at
+      @premium_since = partial_member.premium_since
       @deaf = payload.deaf
       @mute = payload.mute
     end
@@ -125,6 +130,7 @@ module Discord
       nick: String?,
       roles: Array(Snowflake),
       joined_at: {type: Time?, converter: MaybeTimestampConverter},
+      premium_since: {type: Time?, converter: MaybeTimestampConverter},
       deaf: Bool?,
       mute: Bool?
     )
@@ -144,6 +150,7 @@ module Discord
       nick: String?,
       roles: Array(Snowflake),
       joined_at: {type: Time, converter: TimestampConverter},
+      premium_since: {type: Time?, converter: MaybeTimestampConverter},
       deaf: Bool,
       mute: Bool
     )
