@@ -112,7 +112,7 @@ module Discord
       @nick = payload.nick
       @roles = payload.roles
       @joined_at = payload.joined_at
-      @premium_since = partial_member.premium_since
+      @premium_since = payload.premium_since
       @deaf = payload.deaf
       @mute = payload.mute
     end
