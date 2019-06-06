@@ -177,6 +177,8 @@ module Discord
         afk_channel_id: Snowflake?,
         afk_timeout: Int32?,
         verification_level: UInt8,
+        premium_tier: UInt8,
+        premium_subscription_count: UInt8?,
         roles: Array(Role),
         emoji: {type: Array(Emoji), key: "emojis"},
         features: Array(String),
@@ -239,6 +241,7 @@ module Discord
         nick: String?,
         roles: Array(Snowflake),
         joined_at: {type: Time?, converter: MaybeTimestampConverter},
+        premium_since: {type: Time?, converter: MaybeTimestampConverter},
         deaf: Bool,
         mute: Bool,
         guild_id: Snowflake
