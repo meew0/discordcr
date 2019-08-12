@@ -22,6 +22,7 @@ module Discord
 
       headers["Authorization"] = @token
       headers["User-Agent"] = USER_AGENT
+      headers["X-RateLimit-Precision"] = "millisecond"
 
       request_done = false
       rate_limit_key = {route_key: route_key, major_parameter: major_parameter.try(&.to_u64)}
@@ -53,7 +54,7 @@ module Discord
             # the reset header which represents when the rate limit will get
             # reset.
             origin_time = HTTP.parse_time(response.headers["Date"]).not_nil!
-            reset_time = Time.unix(response.headers["X-RateLimit-Reset"].to_u64) # gotta prevent that Y2k38
+            reset_time = Time.unix_ms((response.headers["X-RateLimit-Reset"].to_f64 * 1000).to_i64) # gotta prevent that Y2k38
             retry_after = reset_time - origin_time
           end
 
