@@ -261,7 +261,8 @@ module Discord
     JSON.mapping(
       user: PartialUser,
       game: GamePlaying?,
-      status: String
+      status: String,
+      activities: Array(GamePlaying)
     )
   end
 end
