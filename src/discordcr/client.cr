@@ -833,7 +833,7 @@ module Discord
     # Called when all reactions are removed at once from a message.
     event message_reaction_remove_all, Gateway::MessageReactionRemoveAllPayload
 
-    # Called when all reactions of a given emoji are removed at once from a message.
+    # Called when all reactions of a single emoji are removed at once from a message.
     event message_reaction_remove_emoji, Gateway::MessageReactionRemoveEmojiPayload
 
     # Called when a message is updated. Most commonly this is done for edited
