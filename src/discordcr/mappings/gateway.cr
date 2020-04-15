@@ -311,7 +311,8 @@ module Discord
         inviter: User?,
         max_age: Int32,
         max_uses: Int32,
-        temporary: Bool
+        temporary: Bool,
+        uses: Int32
       )
     end
 
