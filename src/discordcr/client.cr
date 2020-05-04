@@ -575,6 +575,14 @@ module Discord
         @cache.try &.remove_guild_role(payload.guild_id, payload.role_id)
 
         call_event guild_role_delete, payload
+      when "INVITE_CREATE"
+        payload = Gateway::InviteCreatePayload.from_json(data)
+
+        call_event invite_create, payload
+      when "INVITE_DELETE"
+        payload = Gateway::InviteDeletePayload.from_json(data)
+
+        call_event invite_delete, payload
       when "MESSAGE_CREATE"
         payload = Message.from_json(data)
 
@@ -804,6 +812,16 @@ module Discord
     #
     # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-role-delete)
     event guild_role_delete, Gateway::GuildRoleDeletePayload
+
+    # Called when an invite is created on a guild.
+    #
+    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#invite-create)
+    event invite_create, Gateway::InviteCreatePayload
+    
+    # Called when an invite is deleted.
+    #
+    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#invite-delete)
+    event invite_delete, Gateway::InviteDeletePayload
 
     # Called when a message is sent to a channel the bot has access to. This
     # may be any sort of text channel, no matter private or guild.

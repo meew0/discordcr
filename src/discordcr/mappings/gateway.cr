@@ -302,6 +302,28 @@ module Discord
       )
     end
 
+    struct InviteCreatePayload
+      JSON.mapping(
+        channel_id: Snowflake,
+        code: String,
+        created_at: {type: Time?, converter: MaybeTimestampConverter},
+        guild_id: Snowflake?,
+        inviter: User?,
+        max_age: Int32,
+        max_uses: Int32,
+        temporary: Bool,
+        uses: Int32
+      )
+    end
+
+    struct InviteDeletePayload
+      JSON.mapping(
+        channel_id: Snowflake,
+        guild_id: Snowflake?,
+        code: String
+      )
+    end
+
     struct MessageReactionPayload
       JSON.mapping(
         user_id: Snowflake,
