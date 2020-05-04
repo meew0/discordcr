@@ -4,7 +4,7 @@
 
 (The "cr" stands for "creative name".)
 
-discordcr is a minimalist [Discord](https://discordapp.com/) API library for
+discordcr is a minimalist [Discord](https://discord.com/) API library for
 [Crystal](https://crystal-lang.org/), designed to be a complement to
 [discordrb](https://github.com/discordrb/discordrb) for users who want more control
 and performance and who care less about ease-of-use.

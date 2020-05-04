@@ -11,7 +11,7 @@ module Discord
   module REST
     SSL_CONTEXT = OpenSSL::SSL::Context::Client.new
     USER_AGENT  = "DiscordBot (https://github.com/discordcr/discordcr, #{Discord::VERSION})"
-    API_BASE    = "https://discordapp.com/api/v6"
+    API_BASE    = "https://discord.com/api/v6"
 
     Log = Discord::Log.for("rest")
 
@@ -110,7 +110,7 @@ module Discord
 
     # Gets the gateway URL to connect to.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/topics/gateway#get-gateway)
+    # [API docs for this method](https://discord.com/developers/docs/topics/gateway#get-gateway)
     def get_gateway
       response = request(
         :gateway,
@@ -126,7 +126,7 @@ module Discord
 
     # Gets the gateway Bot URL to connect to, and the recommended amount of shards to make.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/topics/gateway#get-gateway-bot)
+    # [API docs for this method](https://discord.com/developers/docs/topics/gateway#get-gateway-bot)
     def get_gateway_bot
       response = request(
         :gateway_bot,
@@ -142,7 +142,7 @@ module Discord
 
     # Gets the OAuth2 application tied to a client.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/topics/oauth2#get-current-application-information)
+    # [API docs for this method](https://discord.com/developers/docs/topics/oauth2#get-current-application-information)
     def get_oauth2_application
       response = request(
         :ouath2_applications_me,
@@ -158,7 +158,7 @@ module Discord
 
     # Gets a channel by ID.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#get-channel)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#get-channel)
     def get_channel(channel_id : UInt64 | Snowflake)
       response = request(
         :channels_cid,
@@ -175,7 +175,7 @@ module Discord
     # Modifies a channel with new properties. Requires the "Manage Channel"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#modify-channel)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#modify-channel)
     def modify_channel(channel_id : UInt64 | Snowflake, name : String? = nil, position : UInt32? = nil,
                        topic : String? = nil, bitrate : UInt32? = nil, user_limit : UInt32? = nil,
                        nsfw : Bool? = nil, rate_limit_per_user : Int32? = nil)
@@ -203,7 +203,7 @@ module Discord
 
     # Deletes a channel by ID. Requires the "Manage Channel" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#deleteclose-channel)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#deleteclose-channel)
     def delete_channel(channel_id : UInt64 | Snowflake)
       request(
         :channels_cid,
@@ -218,7 +218,7 @@ module Discord
     # Gets a list of messages from the channel's history. Requires the "Read
     # Message History" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#get-channel-messages)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#get-channel-messages)
     def get_channel_messages(channel_id : UInt64 | Snowflake, limit : Int32 = 50, before : UInt64 | Snowflake | Nil = nil, after : UInt64 | Snowflake | Nil = nil, around : UInt64 | Snowflake | Nil = nil)
       path = "/channels/#{channel_id}/messages?limit=#{limit}"
       path += "&before=#{before}" if before
@@ -261,7 +261,7 @@ module Discord
     # Gets a single message from the channel's history. Requires the "Read
     # Message History" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#get-channel-message)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#get-channel-message)
     def get_channel_message(channel_id : UInt64 | Snowflake, message_id : UInt64 | Snowflake)
       response = request(
         :channels_cid_messages_mid,
@@ -277,7 +277,7 @@ module Discord
 
     # Sends a message to the channel. Requires the "Send Messages" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#create-message)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#create-message)
     #
     # The `embed` parameter can be used to append a rich embed to the message
     # which allows for displaying certain kinds of data in a more structured
@@ -304,7 +304,7 @@ module Discord
     # ```
     #
     # For more details on the format of the `embed` object, look at the
-    # [relevant documentation](https://discordapp.com/developers/docs/resources/channel#embed-object).
+    # [relevant documentation](https://discord.com/developers/docs/resources/channel#embed-object).
     def create_message(channel_id : UInt64 | Snowflake, content : String, embed : Embed? = nil, tts : Bool = false,
                        nonce : Int64 | String? = nil)
       json = encode_tuple(
@@ -332,7 +332,7 @@ module Discord
     # Requires the "Read Message History" permission and additionally
     # the "Add Reactions" permission if no one has reacted with this emoji yet.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#create-reaction)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#create-reaction)
     def create_reaction(channel_id : UInt64 | Snowflake, message_id : UInt64 | Snowflake, emoji : String)
       response = request(
         :channels_cid_messages_mid_reactions_emoji_me,
@@ -348,7 +348,7 @@ module Discord
     # be in the format `name:id` for custom emoji. For unicode emoji it can
     # simply be the UTF-8 encoded characters.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#delete-own-reaction)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#delete-own-reaction)
     def delete_own_reaction(channel_id : UInt64 | Snowflake, message_id : UInt64 | Snowflake, emoji : String)
       request(
         :channels_cid_messages_mid_reactions_emoji_me,
@@ -365,7 +365,7 @@ module Discord
     # simply be the UTF-8 encoded characters. Requires the "Manage Messages"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#delete-user-reaction)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#delete-user-reaction)
     def delete_user_reaction(channel_id : UInt64 | Snowflake, message_id : UInt64 | Snowflake, emoji : String, user_id : UInt64 | Snowflake)
       request(
         :channels_cid_messages_mid_reactions_emoji_uid,
@@ -379,7 +379,7 @@ module Discord
 
     # Returns all users that have reacted with a specific emoji.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#get-reactions)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#get-reactions)
     def get_reactions(channel_id : UInt64 | Snowflake, message_id : UInt64 | Snowflake, emoji : String)
       response = request(
         :channels_cid_messages_mid_reactions_emoji_me,
@@ -396,7 +396,7 @@ module Discord
     # Removes all reactions from a message. Requires the "Manage Messages"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#delete-all-reactions)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#delete-all-reactions)
     def delete_all_reactions(channel_id : UInt64 | Snowflake, message_id : UInt64 | Snowflake)
       request(
         :channels_cid_messages_mid_reactions,
@@ -430,7 +430,7 @@ module Discord
     # the file's filename will be used instead. If it is an `IO` without
     # filename information, Discord will generate a placeholder filename.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#create-message)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#create-message)
     # (same as `#create_message` -- this method implements form data bodies
     # while `#create_message` implements JSON bodies)
     def upload_file(channel_id : UInt64 | Snowflake, content : String?, file : IO, filename : String? = nil, spoiler : Bool = false)
@@ -468,7 +468,7 @@ module Discord
     # Edits an existing message on the channel. This only works for messages
     # sent by the bot itself - you can't edit others' messages.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#edit-message)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#edit-message)
     def edit_message(channel_id : UInt64 | Snowflake, message_id : UInt64 | Snowflake, content : String, embed : Embed? = nil)
       response = request(
         :channels_cid_messages_mid,
@@ -486,7 +486,7 @@ module Discord
     # been sent by the bot itself or the bot to have the "Manage Messages"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#delete-message)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#delete-message)
     def delete_message(channel_id : UInt64 | Snowflake, message_id : UInt64 | Snowflake)
       response = request(
         :channels_cid_messages_mid,
@@ -501,7 +501,7 @@ module Discord
     # Deletes multiple messages at once from the channel. The maximum amount is
     # 100 messages, the minimum is 2. Requires the "Manage Messages" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#bulk-delete-messages)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#bulk-delete-messages)
     def bulk_delete_messages(channel_id : UInt64 | Snowflake, message_ids : Array(UInt64 | Snowflake))
       response = request(
         :channels_cid_messages_bulk_delete,
@@ -517,7 +517,7 @@ module Discord
     # or creates a new one. The *overwrite_id* should be either a user or a role
     # ID. Requires the "Manage Roles" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#edit-channel-permissions)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#edit-channel-permissions)
     def edit_channel_permissions(channel_id : UInt64 | Snowflake, overwrite_id : UInt64 | Snowflake,
                                  type : String, allow : Permissions, deny : Permissions)
       json = encode_tuple(
@@ -539,7 +539,7 @@ module Discord
     # Gets a list of invites for this channel. Requires the "Manage Channel"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#get-channel-invites)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#get-channel-invites)
     def get_channel_invites(channel_id : UInt64 | Snowflake)
       response = request(
         :channels_cid_invites,
@@ -556,7 +556,7 @@ module Discord
     # Creates a new invite for the channel. Requires the "Create Instant Invite"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#create-channel-invite)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#create-channel-invite)
     def create_channel_invite(channel_id : UInt64 | Snowflake, max_age : UInt32 = 0_u32,
                               max_uses : UInt32 = 0_u32, temporary : Bool = false)
       json = encode_tuple(
@@ -580,7 +580,7 @@ module Discord
     # Deletes a permission overwrite from a channel. Requires the "Manage
     # Permissions" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#delete-channel-permission)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#delete-channel-permission)
     def delete_channel_permission(channel_id : UInt64 | Snowflake, overwrite_id : UInt64 | Snowflake)
       response = request(
         :channels_cid_permissions_oid,
@@ -596,7 +596,7 @@ module Discord
     # 10 seconds, but should be refreshed every five seconds. Requires the
     # "Send Messages" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#trigger-typing-indicator)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#trigger-typing-indicator)
     def trigger_typing_indicator(channel_id : UInt64 | Snowflake)
       response = request(
         :channels_cid_typing,
@@ -610,7 +610,7 @@ module Discord
 
     # Get a list of messages pinned to this channel.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#get-pinned-messages)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#get-pinned-messages)
     def get_pinned_messages(channel_id : UInt64 | Snowflake)
       response = request(
         :channels_cid_pins,
@@ -627,7 +627,7 @@ module Discord
     # Pins a new message to this channel. Requires the "Manage Messages"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#add-pinned-channel-message)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#add-pinned-channel-message)
     def add_pinned_channel_message(channel_id : UInt64 | Snowflake, message_id : UInt64 | Snowflake)
       response = request(
         :channels_cid_pins_mid,
@@ -642,7 +642,7 @@ module Discord
     # Unpins a message from this channel. Requires the "Manage Messages"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/channel#delete-pinned-channel-message)
+    # [API docs for this method](https://discord.com/developers/docs/resources/channel#delete-pinned-channel-message)
     def delete_pinned_channel_message(channel_id : UInt64 | Snowflake, message_id : UInt64 | Snowflake)
       response = request(
         :channels_cid_pins_mid,
@@ -656,7 +656,7 @@ module Discord
 
     # Gets a guild by ID.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#get-guild)
     def get_guild(guild_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid,
@@ -674,7 +674,7 @@ module Discord
     # Server" permission.
     # NOTE: To remove a guild's icon, you can send an empty string for the `icon` argument.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#modify-guild)
     def modify_guild(guild_id : UInt64 | Snowflake, name : String? = nil, region : String? = nil,
                      verification_level : UInt8? = nil, afk_channel_id : UInt64 | Snowflake | Nil = nil,
                      afk_timeout : Int32? = nil, icon : String? = nil, owner_id : UInt64 | Snowflake | Nil = nil,
@@ -704,7 +704,7 @@ module Discord
 
     # Deletes a guild. Requires the bot to be the server owner.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#delete-guild)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#delete-guild)
     def delete_guild(guild_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid,
@@ -720,7 +720,7 @@ module Discord
 
     # Gets a list of emoji on the guild.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#list-guild-emojis)
+    # [API docs for this method](https://discord.com/developers/docs/resources/emoji#list-guild-emojis)
     def list_guild_emojis(guild_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_emojis,
@@ -736,7 +736,7 @@ module Discord
 
     # Gets a specific emoji by guild ID and emoji ID.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#get-guild-emoji)
+    # [API docs for this method](https://discord.com/developers/docs/resources/emoji#get-guild-emoji)
     def get_guild_emoji(guild_id : UInt64 | Snowflake, emoji_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_emojis_eid,
@@ -752,7 +752,7 @@ module Discord
 
     # Modifies a guild emoji. Requires the "Manage Emojis" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#modify-guild-emoji)
+    # [API docs for this method](https://discord.com/developers/docs/resources/emoji#modify-guild-emoji)
     def modify_guild_emoji(guild_id : UInt64 | Snowflake, emoji_id : UInt64 | Snowflake, name : String)
       response = request(
         :guilds_gid_emojis_eid,
@@ -768,7 +768,7 @@ module Discord
 
     # Creates a guild emoji. Requires the "Manage Emojis" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#create-guild-emoji)
+    # [API docs for this method](https://discord.com/developers/docs/resources/emoji#create-guild-emoji)
     def create_guild_emoji(guild_id : UInt64 | Snowflake, name : String, image : String)
       json = encode_tuple(
         name: name,
@@ -789,7 +789,7 @@ module Discord
 
     # Deletes a guild emoji. Requires the "Manage Emojis" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/emoji#delete-guild-emoji)
+    # [API docs for this method](https://discord.com/developers/docs/resources/emoji#delete-guild-emoji)
     def delete_guild_emoji(guild_id : UInt64 | Snowflake, emoji_id : UInt64 | Snowflake)
       request(
         :guilds_gid_emojis_eid,
@@ -803,7 +803,7 @@ module Discord
 
     # Gets a list of channels in a guild.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-channels)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#get-guild-channels)
     def get_guild_channels(guild_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_channels,
@@ -820,7 +820,7 @@ module Discord
     # Creates a new channel on this guild. Requires the "Manage Channels"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#create-guild-channel)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#create-guild-channel)
     def create_guild_channel(guild_id : UInt64 | Snowflake, name : String, type : ChannelType, topic : String?,
                              bitrate : UInt32?, user_limit : UInt32?, rate_limit_per_user : Int32?,
                              position : UInt32?, parent_id : UInt64? | Snowflake?, nsfw : Bool?)
@@ -882,7 +882,7 @@ module Discord
     # Modifies the position of channels within a guild. Requires the
     # "Manage Channels" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-channel-positions)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#modify-guild-channel-positions)
     def modify_guild_channel_positions(guild_id : UInt64 | Snowflake,
                                        positions : Array(ModifyChannelPositionPayload))
       request(
@@ -897,7 +897,7 @@ module Discord
 
     # Gets a specific member by both IDs.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-member)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#get-guild-member)
     def get_guild_member(guild_id : UInt64 | Snowflake, user_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_members_uid,
@@ -915,7 +915,7 @@ module Discord
     # The resulting list will be sorted by user IDs, use the *after* parameter
     # to specify what ID to start at.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#list-guild-members)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#list-guild-members)
     def list_guild_members(guild_id : UInt64 | Snowflake, limit : Int32 = 1000, after : UInt64 | Snowflake = 0_u64)
       path = "/guilds/#{guild_id}/members?limit=#{limit}&after=#{after}"
 
@@ -951,7 +951,7 @@ module Discord
     # NOTE: The bot must be a member of the target guild, and have permissions
     #   to create instant invites.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#add-guild-member)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#add-guild-member)
     def add_guild_member(guild_id : UInt64, user_id : UInt64,
                          access_token : String, nick : String? = nil,
                          roles : Array(UInt64)? = nil, mute : Bool? = nil,
@@ -992,7 +992,7 @@ module Discord
     #
     # NOTE: To remove a member's nickname, you can send an empty string for the `nick` argument.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-member)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#modify-guild-member)
     def modify_guild_member(guild_id : UInt64 | Snowflake, user_id : UInt64 | Snowflake, nick : String? = nil,
                             roles : Array(UInt64 | Snowflake)? = nil, mute : Bool? = nil, deaf : Bool? = nil,
                             channel_id : UInt64 | Snowflake | Nil = nil)
@@ -1018,7 +1018,7 @@ module Discord
     #
     # NOTE: To remove a nickname, you can send an empty string for the `nick` argument.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-current-user-nick)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#modify-current-user-nick)
     def modify_current_user_nick(guild_id : UInt64, nick : String)
       request(
         :guilds_gid_members_me,
@@ -1032,7 +1032,7 @@ module Discord
 
     # Kicks a member from the server. Requires the "Kick Members" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#remove-guild-member)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#remove-guild-member)
     def remove_guild_member(guild_id : UInt64 | Snowflake, user_id : UInt64 | Snowflake)
       request(
         :guilds_gid_members_uid,
@@ -1046,7 +1046,7 @@ module Discord
 
     # Adds a role to a member. Requires the "Manage Roles" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#add-guild-member-role)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#add-guild-member-role)
     def add_guild_member_role(guild_id : UInt64 | Snowflake, user_id : UInt64 | Snowflake, role_id : UInt64 | Snowflake)
       request(
         :guilds_gid_members_uid_roles_rid,
@@ -1060,7 +1060,7 @@ module Discord
 
     # Removes a role from a member. Requires the "Manage Roles" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#remove-guild-member-role)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#remove-guild-member-role)
     def remove_guild_member_role(guild_id : UInt64, user_id : UInt64, role_id : UInt64)
       request(
         :guilds_gid_members_uid_roles_rid,
@@ -1075,7 +1075,7 @@ module Discord
     # Gets a list of members banned from this server. Requires the "Ban Members"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-bans)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#get-guild-bans)
     def get_guild_bans(guild_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_bans,
@@ -1092,7 +1092,7 @@ module Discord
     # Returns information about a banned user in a guild. Requires the "Ban Members"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-ban)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#get-guild-ban)
     def get_guild_ban(guild_id : UInt64 | Snowflake, user_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_bans_uid,
@@ -1108,7 +1108,7 @@ module Discord
 
     # Bans a member from the guild. Requires the "Ban Members" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#create-guild-ban)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#create-guild-ban)
     def create_guild_ban(guild_id : UInt64 | Snowflake, user_id : UInt64 | Snowflake,
                          delete_message_days : Int32? = nil, reason : String? = nil)
       params = HTTP::Params.build do |form|
@@ -1128,7 +1128,7 @@ module Discord
 
     # Unbans a member from the guild. Requires the "Ban Members" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#remove-guild-ban)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#remove-guild-ban)
     def remove_guild_ban(guild_id : UInt64 | Snowflake, user_id : UInt64 | Snowflake)
       request(
         :guilds_gid_bans_uid,
@@ -1142,7 +1142,7 @@ module Discord
 
     # Get a list of roles on the guild.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-roles)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#get-guild-roles)
     def get_guild_roles(guild_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_roles,
@@ -1158,7 +1158,7 @@ module Discord
 
     # Creates a new role on the guild. Requires the "Manage Roles" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#create-guild-role)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#create-guild-role)
     def create_guild_role(guild_id : UInt64 | Snowflake, name : String? = nil,
                           permissions : Permissions? = nil, colour : UInt32 = 0_u32,
                           hoist : Bool = false, mentionable : Bool = false)
@@ -1185,7 +1185,7 @@ module Discord
     # Changes a role's properties. Requires the "Manage Roles" permission as
     # well as the role to be lower than the bot's highest role.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-role)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#modify-guild-role)
     def modify_guild_role(guild_id : UInt64 | Snowflake, role_id : UInt64 | Snowflake, name : String? = nil,
                           permissions : Permissions? = nil, colour : UInt32? = nil,
                           position : Int32? = nil, hoist : Bool? = nil)
@@ -1212,7 +1212,7 @@ module Discord
     # Changes the position of roles. Requires the "Manage Roles" permission
     # and you cannot raise roles above the bot's highest role.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-role-positions)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#modify-guild-role-positions)
     def modify_guild_role_positions(guild_id : UInt64 | Snowflake,
                                     positions : Array(ModifyRolePositionPayload))
       response = request(
@@ -1230,7 +1230,7 @@ module Discord
     # Deletes a role. Requires the "Manage Roles" permission as well as the role
     # to be lower than the bot's highest role.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#delete-guild-role)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#delete-guild-role)
     def delete_guild_role(guild_id : UInt64 | Snowflake, role_id : UInt64 | Snowflake)
       request(
         :guilds_gid_roles_rid,
@@ -1245,7 +1245,7 @@ module Discord
     # Get a number of members that would be pruned with the given number of
     # days. Requires the "Kick Members" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-prune-count)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#get-guild-prune-count)
     def get_guild_prune_count(guild_id : UInt64 | Snowflake, days : UInt32)
       response = request(
         :guilds_gid_prune,
@@ -1262,7 +1262,7 @@ module Discord
     # Prunes all members from this guild which haven't been seen for more than
     # *days* days. Requires the "Kick Members" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#begin-guild-prune)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#begin-guild-prune)
     def begin_guild_prune(guild_id : UInt64 | Snowflake, days : UInt32)
       response = request(
         :guilds_gid_prune,
@@ -1279,7 +1279,7 @@ module Discord
     # Gets a list of voice regions available for this guild. This may include
     # VIP regions for VIP servers.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-voice-regions)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#get-guild-voice-regions)
     def get_guild_voice_regions(guild_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_regions,
@@ -1296,7 +1296,7 @@ module Discord
     # Gets a list of integrations (Twitch, YouTube, etc.) for this guild.
     # Requires the "Manage Guild" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-integrations)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#get-guild-integrations)
     def get_guild_integrations(guild_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_integrations,
@@ -1313,7 +1313,7 @@ module Discord
     # Creates a new integration for this guild. Requires the "Manage Guild"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#create-guild-integration)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#create-guild-integration)
     def create_guild_integration(guild_id : UInt64 | Snowflake, type : String, id : UInt64 | Snowflake)
       json = encode_tuple(
         type: type,
@@ -1333,7 +1333,7 @@ module Discord
     # Modifies an existing guild integration. Requires the "Manage Guild"
     # permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-integration)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#modify-guild-integration)
     def modify_guild_integration(guild_id : UInt64 | Snowflake, integration_id : UInt64 | Snowflake,
                                  expire_behaviour : UInt8,
                                  expire_grace_period : Int32,
@@ -1356,7 +1356,7 @@ module Discord
 
     # Deletes a guild integration. Requires the "Manage Guild" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#delete-guild-integration)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#delete-guild-integration)
     def delete_guild_integration(guild_id : UInt64 | Snowflake, integration_id : UInt64 | Snowflake)
       request(
         :guilds_gid_integrations_iid,
@@ -1370,7 +1370,7 @@ module Discord
 
     # Syncs an integration. Requires the "Manage Guild" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#sync-guild-integration)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#sync-guild-integration)
     def sync_guild_integration(guild_id : UInt64 | Snowflake, integration_id : UInt64 | Snowflake)
       request(
         :guilds_gid_integrations_iid_sync,
@@ -1384,7 +1384,7 @@ module Discord
 
     # Gets embed data for a guild. Requires the "Manage Guild" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild-embed)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#get-guild-embed)
     def get_guild_embed(guild_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_embed,
@@ -1400,7 +1400,7 @@ module Discord
 
     # Modifies embed data for a guild. Requires the "Manage Guild" permission.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#modify-guild-embed)
+    # [API docs for this method](https://discord.com/developers/docs/resources/guild#modify-guild-embed)
     def modify_guild_embed(guild_id : UInt64 | Snowflake, enabled : Bool,
                            channel_id : UInt64 | Snowflake)
       json = encode_tuple(
@@ -1422,7 +1422,7 @@ module Discord
 
     # Gets a specific user by ID.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/user#get-user)
+    # [API docs for this method](https://discord.com/developers/docs/resources/user#get-user)
     def get_user(user_id : UInt64 | Snowflake)
       response = request(
         :users_uid,
@@ -1438,7 +1438,7 @@ module Discord
 
     # Gets the current bot user.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/user#get-current-user)
+    # [API docs for this method](https://discord.com/developers/docs/resources/user#get-current-user)
     def get_current_user
       response = request(
         :users_me,
@@ -1455,7 +1455,7 @@ module Discord
     # Modifies the current bot user, changing the username and avatar.
     # NOTE: To remove the current user's avatar, you can send an empty string for the `avatar` argument.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/user#modify-current-user)
+    # [API docs for this method](https://discord.com/developers/docs/resources/user#modify-current-user)
     def modify_current_user(username : String? = nil, avatar : String? = nil)
       json = encode_tuple(
         username: username,
@@ -1476,7 +1476,7 @@ module Discord
 
     # Gets a list of user guilds the current user is on.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/user#get-current-user-guilds)
+    # [API docs for this method](https://discord.com/developers/docs/resources/user#get-current-user-guilds)
     def get_current_user_guilds(limit : Int32 = 100, before : UInt64 | Snowflake = 0_u64, after : UInt64 | Snowflake = 0_u64)
       params = HTTP::Params.build do |form|
         form.add "limit", limit.to_s
@@ -1525,7 +1525,7 @@ module Discord
 
     # Makes the bot leave a guild.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/user#leave-guild)
+    # [API docs for this method](https://discord.com/developers/docs/resources/user#leave-guild)
     def leave_guild(guild_id : UInt64 | Snowflake)
       request(
         :users_me_guilds_gid,
@@ -1539,7 +1539,7 @@ module Discord
 
     # Gets a list of DM channels the bot has access to.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/user#get-user-dms)
+    # [API docs for this method](https://discord.com/developers/docs/resources/user#get-user-dms)
     def get_user_dms
       response = request(
         :users_me_channels,
@@ -1556,7 +1556,7 @@ module Discord
     # Creates a new DM channel with a given recipient. If there was already one
     # before, it will be reopened.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/user#create-dm)
+    # [API docs for this method](https://discord.com/developers/docs/resources/user#create-dm)
     def create_dm(recipient_id : UInt64 | Snowflake)
       response = request(
         :users_me_channels,
@@ -1572,7 +1572,7 @@ module Discord
 
     # Gets a list of connections the user has set up (Twitch, YouTube, etc.)
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/user#get-user-connections)
+    # [API docs for this method](https://discord.com/developers/docs/resources/user#get-user-connections)
     def get_user_connections
       response = request(
         :users_me_connections,
@@ -1588,7 +1588,7 @@ module Discord
 
     # Gets a specific invite by its code.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/invite#get-invite)
+    # [API docs for this method](https://discord.com/developers/docs/resources/invite#get-invite)
     def get_invite(code : String)
       response = request(
         :invites_code,
@@ -1606,7 +1606,7 @@ module Discord
     # the channel the invite is for, or the "Manage Server" permission for the
     # server.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/invite#delete-invite)
+    # [API docs for this method](https://discord.com/developers/docs/resources/invite#delete-invite)
     def delete_invite(code : String)
       response = request(
         :invites_code,
@@ -1622,7 +1622,7 @@ module Discord
 
     # Gets a list of voice regions newly created servers have access to.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/voice#list-voice-regions)
+    # [API docs for this method](https://discord.com/developers/docs/resources/voice#list-voice-regions)
     def list_voice_regions
       response = request(
         :voice_regions,
@@ -1638,7 +1638,7 @@ module Discord
 
     # Get a webhook.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/webhook#get-webhook).
+    # [API docs for this method](https://discord.com/developers/docs/resources/webhook#get-webhook).
     def get_webhook(webhook_id : UInt64 | Snowflake)
       response = request(
         :webhooks_wid,
@@ -1653,7 +1653,7 @@ module Discord
 
     # Get a webhook, with a token.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/webhook#get-webhook-with-token).
+    # [API docs for this method](https://discord.com/developers/docs/resources/webhook#get-webhook-with-token).
     def get_webhook(webhook_id : UInt64 | Snowflake, token : String)
       response = request(
         :webhooks_wid,
@@ -1668,7 +1668,7 @@ module Discord
 
     # Get an array of guild webhooks.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/webhook#get-guild-webhooks).
+    # [API docs for this method](https://discord.com/developers/docs/resources/webhook#get-guild-webhooks).
     def get_guild_webhooks(guild_id : UInt64 | Snowflake)
       response = request(
         :guilds_gid_webhooks,
@@ -1683,7 +1683,7 @@ module Discord
 
     # Create a channel webhook.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/webhook#create-webhook).
+    # [API docs for this method](https://discord.com/developers/docs/resources/webhook#create-webhook).
     def create_channel_webhook(channel_id : UInt64 | Snowflake, name : String,
                                avatar : String)
       json = {
@@ -1705,7 +1705,7 @@ module Discord
 
     # Get an array of channel webhooks.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/webhook#get-channel-webhooks).
+    # [API docs for this method](https://discord.com/developers/docs/resources/webhook#get-channel-webhooks).
     def get_channel_webhooks(channel_id : UInt64 | Snowflake)
       response = request(
         :channels_cid_webhooks,
@@ -1721,7 +1721,7 @@ module Discord
 
     # Modify a webhook. Accepts optional parameters `name`, `avatar`, and `channel_id`.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/webhook#modify-webhook).
+    # [API docs for this method](https://discord.com/developers/docs/resources/webhook#modify-webhook).
     def modify_webhook(webhook_id : UInt64 | Snowflake, name : String? = nil, avatar : String? = nil,
                        channel_id : UInt64 | Snowflake | Nil = nil)
       json = encode_tuple(
@@ -1744,7 +1744,7 @@ module Discord
 
     # Modify a webhook, with a token. Accepts optional parameters `name`, `avatar`, and `channel_id`.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/webhook#modify-webhook-with-token).
+    # [API docs for this method](https://discord.com/developers/docs/resources/webhook#modify-webhook-with-token).
     def modify_webhook_with_token(webhook_id : UInt64 | Snowflake, token : String, name : String? = nil,
                                   avatar : String? = nil)
       json = encode_tuple(
@@ -1766,7 +1766,7 @@ module Discord
 
     # Deletes a webhook. User must be owner.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/webhook#delete-webhook)
+    # [API docs for this method](https://discord.com/developers/docs/resources/webhook#delete-webhook)
     def delete_webhook(webhook_id : UInt64 | Snowflake)
       request(
         :webhooks_wid,
@@ -1780,7 +1780,7 @@ module Discord
 
     # Deletes a webhook with a token. Does not require authentication.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/webhook#delete-webhook-with-token)
+    # [API docs for this method](https://discord.com/developers/docs/resources/webhook#delete-webhook-with-token)
     def delete_webhook(webhook_id : UInt64 | Snowflake, token : String)
       request(
         :webhooks_wid,
@@ -1794,7 +1794,7 @@ module Discord
 
     # Executes a webhook, with a token.
     #
-    # [API docs for this method](https://discordapp.com/developers/docs/resources/webhook#execute-webhook)
+    # [API docs for this method](https://discord.com/developers/docs/resources/webhook#execute-webhook)
     def execute_webhook(webhook_id : UInt64 | Snowflake, token : String, content : String? = nil,
                         file : String? = nil, embeds : Array(Embed)? = nil,
                         tts : Bool? = nil, avatar_url : String? = nil,
