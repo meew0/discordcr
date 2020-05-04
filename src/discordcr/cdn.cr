@@ -4,7 +4,7 @@
 # NOTE: All `size` arguments for CDN methods must be a power of 2 between 16
 # and 2048. If an invalid size is given, `ArgumentError` will be raised.
 #
-# [API Documentation for image formatting](https://discordapp.com/developers/docs/reference#image-formatting)
+# [API Documentation for image formatting](https://discord.com/developers/docs/reference#image-formatting)
 module Discord::CDN
   extend self
 

@@ -69,7 +69,7 @@ module Discord
     # If the *shard* key is set, the gateway will operate in sharded mode. This
     # means that this client's gateway connection will only receive packets from
     # a part of the guilds the bot is connected to. See
-    # [here](https://discordapp.com/developers/docs/topics/gateway#sharding)
+    # [here](https://discord.com/developers/docs/topics/gateway#sharding)
     # for more information.
     #
     # The *large_threshold* defines the minimum member count that, if a guild
@@ -706,38 +706,38 @@ module Discord
     # bot lifetime, as it is also called when the client reconnects with a new
     # session.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#ready)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#ready)
     event ready, Gateway::ReadyPayload
 
     # Called when the client has successfully resumed an existing connection
     # after reconnecting.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#resumed)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#resumed)
     event resumed, Gateway::ResumedPayload
 
     # Called when a channel has been created on a server the bot has access to,
     # or when somebody has started a DM channel with the bot.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#channel-create)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#channel-create)
     event channel_create, Channel
 
     # Called when a channel's properties are updated, like the name or
     # permission overwrites.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#channel-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#channel-update)
     event channel_update, Channel
 
     # Called when a channel the bot has access to is deleted. This is not called
     # for other users closing the DM channel with the bot, only for the bot
     # closing the DM channel with a user.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#channel-delete)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#channel-delete)
     event channel_delete, Channel
 
     # Called when a channel's pinned messages are updated, where a pin was
     # either added or removed.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#channel-pins-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#channel-pins-update)
     event channel_pins_update, Gateway::ChannelPinsUpdatePayload
 
     # Called when the bot is added to a guild, a guild unavailable due to an
@@ -745,85 +745,85 @@ module Discord
     # To verify that it is the first case, you can check the `unavailable`
     # property in `Gateway::GuildCreatePayload`.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-create)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-create)
     event guild_create, Gateway::GuildCreatePayload
 
     # Called when a guild's properties, like name or verification level, are
     # updated.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-update)
     event guild_update, Guild
 
     # Called when the bot leaves a guild or a guild becomes unavailable due to
     # an outage. To verify that it is the former case, you can check the
     # `unavailable` property.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-delete)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-delete)
     event guild_delete, Gateway::GuildDeletePayload
 
     # Called when somebody is banned from a guild. A `#on_guild_member_remove`
     # event is also called.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-ban-add)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-ban-add)
     event guild_ban_add, Gateway::GuildBanPayload
 
     # Called when somebody is unbanned from a guild.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-ban-remove)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-ban-remove)
     event guild_ban_remove, Gateway::GuildBanPayload
 
     # Called when a guild's emoji are updated.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-emoji-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-emoji-update)
     event guild_emoji_update, Gateway::GuildEmojiUpdatePayload
 
     # Called when a guild's integrations (Twitch, YouTube) are updated.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-integrations-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-integrations-update)
     event guild_integrations_update, Gateway::GuildIntegrationsUpdatePayload
 
     # Called when somebody other than the bot joins a guild.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-member-add)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-member-add)
     event guild_member_add, Gateway::GuildMemberAddPayload
 
     # Called when a member object is updated. This happens when somebody
     # changes their nickname or has their roles changed.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-member-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-member-update)
     event guild_member_update, Gateway::GuildMemberUpdatePayload
 
     # Called when somebody other than the bot leaves a guild.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-member-remove)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-member-remove)
     event guild_member_remove, Gateway::GuildMemberRemovePayload
 
     # Called when Discord sends a chunk of member objects after a
     # `#request_guild_members` call. If a `Cache` is set up, this is handled
     # automatically.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-members-chunk)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-members-chunk)
     event guild_members_chunk, Gateway::GuildMembersChunkPayload
 
     # Called when a role is created on a guild.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-role-create)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-role-create)
     event guild_role_create, Gateway::GuildRolePayload
 
     # Called when a role's properties are updated, for example name or colour.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-role-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-role-update)
     event guild_role_update, Gateway::GuildRolePayload
 
     # Called when a role is deleted.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#guild-role-delete)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#guild-role-delete)
     event guild_role_delete, Gateway::GuildRoleDeletePayload
 
     # Called when a message is sent to a channel the bot has access to. This
     # may be any sort of text channel, no matter private or guild.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#message-create)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#message-create)
     event message_create, Message
 
     # Called when a reaction is added to a message.
@@ -842,41 +842,41 @@ module Discord
     # messages, but the event is also sent when embed information for an
     # existing message is updated.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#message-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#message-update)
     event message_update, Gateway::MessageUpdatePayload
 
     # Called when a single message is deleted.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#message-delete)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#message-delete)
     event message_delete, Gateway::MessageDeletePayload
 
     # Called when multiple messages are deleted at once, due to a bot using the
     # bulk-delete endpoint, or other actions.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#message-delete-bulk)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#message-delete-bulk)
     event message_delete_bulk, Gateway::MessageDeleteBulkPayload
 
     # Called when a user updates their status (online/idle/offline), the game
     # they are playing, or their streaming status. Also called when a user's
     # properties (user/avatar/discriminator) are changed.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#presence-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#presence-update)
     event presence_update, Gateway::PresenceUpdatePayload
 
     # Called when somebody starts typing in a channel the bot has access to.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#typing-start)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#typing-start)
     event typing_start, Gateway::TypingStartPayload
 
     # Called when the user properties of the bot itself are changed.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#user-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#user-update)
     event user_update, User
 
     # Called when somebody joins or leaves a voice channel, moves to a different
     # one, or is muted/unmuted/deafened/undeafened.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#voice-state-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#voice-state-update)
     event voice_state_update, VoiceState
 
     # Called when a guild's voice server changes. This event is called with
@@ -884,12 +884,12 @@ module Discord
     # called again with the new voice server when the current server fails over
     # to a new one, or when the guild's voice region changes.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#voice-server-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#voice-server-update)
     event voice_server_update, Gateway::VoiceServerUpdatePayload
 
     # Sent when a guild channel's webhook is created, updated, or deleted.
     #
-    # [API docs for this event](https://discordapp.com/developers/docs/topics/gateway#webhooks-update)
+    # [API docs for this event](https://discord.com/developers/docs/topics/gateway#webhooks-update)
     event webhooks_update, Gateway::WebhooksUpdatePayload
   end
 
