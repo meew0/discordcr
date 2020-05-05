@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build: 
+    working_directory: ~/discordcr
+    docker:
+      - image: crystallang/crystal:latest
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "shard.lock" }}
+      - run:
+          name: Install dependencies.
+          command: shards install
+      - save_cache:
+          key: dependency-cache-{{ checksum "shard.lock" }}
+          paths:
+            - ./lib
+      - run: crystal spec
+      - run: crystal tool format --check
+      - run: find examples -name "*.cr" | xargs -L 1 crystal build --no-codegen
+      - run: 
+        command: bash ./deploy.sh
+        environment:
+          ENCRYPTION_LABEL: "65183d8b3ae9"
+          COMMIT_AUTHOR_EMAIL: "blactbt@live.de"
