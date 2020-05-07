@@ -25,7 +25,7 @@ module Discord
       headers["Authorization"] = @token
       headers["User-Agent"] = USER_AGENT
       headers["X-RateLimit-Precision"] = "millisecond"
-      path = URI.encode path
+      path = URI.encode(path)
 
       request_done = false
       rate_limit_key = {route_key: route_key, major_parameter: major_parameter.try(&.to_u64)}
