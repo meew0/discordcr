@@ -25,7 +25,6 @@ module Discord
       headers["Authorization"] = @token
       headers["User-Agent"] = USER_AGENT
       headers["X-RateLimit-Precision"] = "millisecond"
-      path = URI.encode(path)
 
       request_done = false
       rate_limit_key = {route_key: route_key, major_parameter: major_parameter.try(&.to_u64)}
@@ -339,7 +338,7 @@ module Discord
         :channels_cid_messages_mid_reactions_emoji_me,
         channel_id,
         "PUT",
-        "/channels/#{channel_id}/messages/#{message_id}/reactions/#{emoji}/@me",
+        "/channels/#{channel_id}/messages/#{message_id}/reactions/#{URI.encode(emoji)}/@me",
         HTTP::Headers.new,
         nil
       )
@@ -355,7 +354,7 @@ module Discord
         :channels_cid_messages_mid_reactions_emoji_me,
         channel_id,
         "DELETE",
-        "/channels/#{channel_id}/messages/#{message_id}/reactions/#{emoji}/@me",
+        "/channels/#{channel_id}/messages/#{message_id}/reactions/#{URI.encode(emoji)}/@me",
         HTTP::Headers.new,
         nil
       )
@@ -372,7 +371,7 @@ module Discord
         :channels_cid_messages_mid_reactions_emoji_uid,
         channel_id,
         "DELETE",
-        "/channels/#{channel_id}/messages/#{message_id}/reactions/#{emoji}/#{user_id}",
+        "/channels/#{channel_id}/messages/#{message_id}/reactions/#{URI.encode(emoji)}/#{user_id}",
         HTTP::Headers.new,
         nil
       )
@@ -386,7 +385,7 @@ module Discord
         :channels_cid_messages_mid_reactions_emoji_me,
         channel_id,
         "GET",
-        "/channels/#{channel_id}/messages/#{message_id}/reactions/#{emoji}",
+        "/channels/#{channel_id}/messages/#{message_id}/reactions/#{URI.encode(emoji)}",
         HTTP::Headers.new,
         nil
       )
@@ -418,7 +417,7 @@ module Discord
         :channels_cid_messages_mid_reactions_emoji,
         channel_id,
         "DELETE",
-        "/channels/#{channel_id}/messages/#{message_id}/reactions/#{emoji}",
+        "/channels/#{channel_id}/messages/#{message_id}/reactions/#{URI.encode(emoji)}",
         HTTP::Headers.new,
         nil
       )
