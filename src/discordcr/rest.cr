@@ -654,6 +654,43 @@ module Discord
       )
     end
 
+    # Creates a new guild. Can only be used when the current user is in less than 10 guilds.
+    #
+    # The properties of the first member of the roles array will be used for the `@everyone` role of the guild,
+    # except for the name.
+    #
+    # When no channels are given, the default guild channel set will be created,
+    # a "Text Channels" category with a #general text channel and a
+    # "Voice Channels" category with a "General" voice channel.
+    #
+    # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#create-guild)
+    def create_guild(name : String, region : String? = nil, icon : String? = nil,
+                     verification_level : UInt8? = nil, default_message_notifications : Int32? = nil,
+                     explicit_content_filter : Int32? = nil, roles : Array(GuildCreateRole)? = nil,
+                     channels : Array(PartialChannel)? = nil)
+      json = encode_tuple(
+        name: name,
+        region: region,
+        icon: icon,
+        verification_level: verification_level,
+        default_message_notifications: default_message_notifications,
+        explicit_content_filter: explicit_content_filter,
+        roles: roles,
+        channels: channels
+      )
+
+      response = request(
+        :guilds_gid,
+        nil,
+        "POST",
+        "/guilds",
+        HTTP::Headers{"Content-Type" => "application/json"},
+        json
+      )
+
+      Guild.from_json(response.body)
+    end
+
     # Gets a guild by ID.
     #
     # [API docs for this method](https://discordapp.com/developers/docs/resources/guild#get-guild)
@@ -714,8 +751,6 @@ module Discord
         HTTP::Headers.new,
         nil
       )
-
-      Guild.from_json(response.body)
     end
 
     # Gets a list of emoji on the guild.

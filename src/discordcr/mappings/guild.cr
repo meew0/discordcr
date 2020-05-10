@@ -237,6 +237,23 @@ module Discord
     end
   end
 
+  struct GuildCreateRole
+    include JSON::Serializable
+
+    @[JSON::Field(key: "color")]
+    property colour : UInt32?
+
+    def initialize(@id : Snowflake = Discord::Snowflake.new(0),
+                   @name : String? = nil,
+                   @colour : UInt32? = nil,
+                   @hoist : Bool? = nil,
+                   @position : Int32? = nil,
+                   @permissions : Permissions? = nil,
+                   @managed : Bool? = nil,
+                   @mentionable : Bool? = nil)
+    end
+  end
+
   struct GuildBan
     JSON.mapping(
       user: User,

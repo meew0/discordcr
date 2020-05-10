@@ -106,6 +106,28 @@ module Discord
     end
   end
 
+  struct PartialChannel
+    include JSON::Serializable
+
+    def initialize(@name : String,
+                   @id : Snowflake? = nil,
+                   @type : ChannelType? = nil,
+                   @guild_id : Snowflake? = nil,
+                   @permission_overwrites : Array(Overwrite)? = nil,
+                   @topic : String? = nil,
+                   @last_message_id : Snowflake? = nil,
+                   @bitrate : UInt32? = nil,
+                   @user_limit : UInt32? = nil,
+                   @recipients : Array(User)? = nil,
+                   @nsfw : Bool? = nil,
+                   @icon : Bool? = nil,
+                   @owner_id : Snowflake? = nil,
+                   @application_id : Snowflake? = nil,
+                   @position : Int32? = nil,
+                   @rate_limit_per_user : Int32? = nil)
+    end
+  end
+
   struct PrivateChannel
     JSON.mapping(
       id: Snowflake,
