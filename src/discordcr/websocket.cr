@@ -60,7 +60,7 @@ module Discord
 
     def initialize(@host : String, @path : String, @port : Int32, @tls : Bool,
                    @zlib_buffer_size : Int32 = 10 * 1024 * 1024)
-      Log.info { "Connecting to #{@host}/#{@path}:#{@port}" }
+      Log.info { "Connecting to #{@host}#{@path}:#{@port}" }
       @websocket = HTTP::WebSocket.new(
         host: @host,
         path: @path,
