@@ -672,6 +672,26 @@ module Discord
       def on_{{name}}(&handler : {{payload_type}} ->)
         (@on_{{name}}_handlers ||= [] of {{payload_type}} ->) << handler
       end
+
+      def on_{{name}}(*middleware, &block : {{payload_type}}, Context ->)
+        stack = Stack.new(*middleware)
+        on_{{name}} do |payload|
+          context = Context.new
+          context.put(self)
+          middleware.each { |mw| context.put mw }
+          stack.run(payload, context, 0, &block)
+        end
+      end
+
+      def on_{{name}}(*middleware)
+        stack = Stack.new(*middleware)
+        on_{{name}} do |payload|
+          context = Context.new
+          context.put(self)
+          middleware.each { |mw| context.put mw }
+          stack.run(payload, context)
+        end
+      end
     end
 
     # Called when the bot receives any kind of dispatch at all, even one that
