@@ -1,5 +1,5 @@
 require "http"
-require "zlib"
+require "compress/zlib"
 
 module Discord
   # Internal wrapper around HTTP::WebSocket to decode the Discord-specific
@@ -55,7 +55,7 @@ module Discord
 
     ZLIB_SUFFIX = Bytes[0x0, 0x0, 0xFF, 0xFF]
 
-    @zlib_reader : Zlib::Reader?
+    @zlib_reader : Compress::Zlib::Reader?
     @buffer : Bytes
 
     def initialize(@host : String, @path : String, @port : Int32, @tls : Bool,
@@ -78,7 +78,7 @@ module Discord
     def on_compressed(&handler : Packet ->)
       @websocket.on_binary do |binary|
         io = IO::Memory.new(binary)
-        Zlib::Reader.open(io) do |reader|
+        Compress::Zlib::Reader.open(io) do |reader|
           payload = Packet.from_json(reader)
           Log.debug { "[WS IN] (compressed, #{binary.size} bytes) #{payload.to_json}" }
           handler.call(payload)
@@ -93,7 +93,7 @@ module Discord
         next if binary.size < 4 || binary[binary.size - 4, 4] != ZLIB_SUFFIX
         @zlib_io.rewind
 
-        zlib_reader = (@zlib_reader ||= Zlib::Reader.new(@zlib_io))
+        zlib_reader = (@zlib_reader ||= Compress::Zlib::Reader.new(@zlib_io))
 
         read_size = zlib_reader.read(@buffer_memory)
         @buffer = @buffer_memory[0, read_size]
