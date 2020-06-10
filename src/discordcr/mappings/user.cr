@@ -55,7 +55,7 @@ module Discord
   end
 
   @[Flags]
-  enum UserFlags : UInt16
+  enum UserFlags : UInt32
     DiscordEmployee = 1 << 0
     DiscordPartner  = 1 << 1
     HypeSquadEvents = 1 << 2
@@ -68,7 +68,7 @@ module Discord
     System          = 1 << 12
 
     def self.new(pull : JSON::PullParser)
-      UserFlags.new(pull.read_int.to_u16)
+      UserFlags.new(pull.read_int.to_u32)
     end
   end
 
