@@ -124,7 +124,7 @@ module Discord
       property game : GamePlaying?
       property afk : Bool
       @[JSON::Field(nilable: true, emit_null: true)]
-      property since : Int64
+      property since : Int64?
     end
 
     struct VoiceStateUpdatePacket
@@ -262,7 +262,7 @@ module Discord
       property user : User
       property roles : Array(Snowflake)
       @[JSON::Field(nilable: true)]
-      property nick : String
+      property nick : String?
       property guild_id : Snowflake
     end
 
