@@ -3,14 +3,13 @@ require "./user"
 
 module Discord
   struct Webhook
-    JSON.mapping(
-      id: Snowflake,
-      guild_id: Snowflake?,
-      channel_id: Snowflake,
-      user: User?,
-      name: String,
-      avatar: String?,
-      token: String
-    )
+    include JSON::Serializable
+    property id : Snowflake
+    property guild_id : Snowflake?
+    property channel_id : Snowflake
+    property user : User?
+    property name : String
+    property avatar : String?
+    property token : String
   end
 end

@@ -90,61 +90,55 @@ module Discord
   # Mappings for DCA1 metadata
   module DCA1Mappings
     struct Metadata
-      JSON.mapping(
-        dca: DCA,
-        opus: Opus,
-        info: Info?,
-        origin: Origin?,
-        extra: JSON::Any
-      )
+      include JSON::Serializable
+      property dca : DCA
+      property opus : Opus
+      property info : Info?
+      property origin : Origin?
+      property extra : JSON::Any
     end
 
     struct DCA
-      JSON.mapping(
-        version: Int32,
-        tool: Tool
-      )
+      include JSON::Serializable
+      property version : Int32
+      property tool : Tool
     end
 
     struct Tool
-      JSON.mapping(
-        name: String,
-        version: String,
-        url: String?,
-        author: String?
-      )
+      include JSON::Serializable
+      property name : String
+      property version : String
+      property url : String?
+      property author : String?
     end
 
     struct Opus
-      JSON.mapping(
-        mode: String,
-        sample_rate: Int32,
-        frame_size: Int32,
-        abr: Int32?,
-        vbr: Bool,
-        channels: Int32
-      )
+      include JSON::Serializable
+      property mode : String
+      property sample_rate : Int32
+      property frame_size : Int32
+      property abr : Int32?
+      property vbr : Bool
+      property channels : Int32
     end
 
     struct Info
-      JSON.mapping(
-        title: String?,
-        artist: String?,
-        album: String?,
-        genre: String?,
-        comments: String?,
-        cover: String?
-      )
+      include JSON::Serializable
+      property title : String?
+      property artist : String?
+      property album : String?
+      property genre : String?
+      property comments : String?
+      property cover : String?
     end
 
     struct Origin
-      JSON.mapping(
-        source: String?,
-        abr: Int32?,
-        channels: Int32?,
-        encoding: String?,
-        url: String?
-      )
+      include JSON::Serializable
+      property source : String?
+      property abr : Int32?
+      property channels : Int32?
+      property encoding : String?
+      property url : String?
     end
   end
 end

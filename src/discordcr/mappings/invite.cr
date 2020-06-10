@@ -3,41 +3,38 @@ require "./user"
 
 module Discord
   struct Invite
-    JSON.mapping(
-      code: String,
-      guild: InviteGuild,
-      channel: InviteChannel
-    )
+    include JSON::Serializable
+    property code : String
+    property guild : InviteGuild
+    property channel : InviteChannel
   end
 
   struct InviteMetadata
-    JSON.mapping(
-      code: String,
-      guild: InviteGuild,
-      channel: InviteChannel,
-      inviter: User,
-      users: UInt32,
-      max_uses: UInt32,
-      max_age: UInt32,
-      temporary: Bool,
-      created_at: {type: Time, converter: TimestampConverter},
-      revoked: Bool
-    )
+    include JSON::Serializable
+    property code : String
+    property guild : InviteGuild
+    property channel : InviteChannel
+    property inviter : User
+    property users : UInt32
+    property max_uses : UInt32
+    property max_age : UInt32
+    property temporary : Bool
+    @[JSON::Field(converter: TimestampConverter)]
+    property created_at : Time
+    property revoked : Bool
   end
 
   struct InviteGuild
-    JSON.mapping(
-      id: Snowflake,
-      name: String,
-      splash_hash: String?
-    )
+    include JSON::Serializable
+    property id : Snowflake
+    property name : String
+    property splash_hash : String?
   end
 
   struct InviteChannel
-    JSON.mapping(
-      id: Snowflake,
-      name: String,
-      type: UInt8
-    )
+    include JSON::Serializable
+    property id : Snowflake
+    property name : String
+    property type : UInt8
   end
 end
