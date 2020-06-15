@@ -4,41 +4,42 @@ module Discord
   module REST
     # A response to the Get Gateway REST API call.
     struct GatewayResponse
-      JSON.mapping(
-        url: String
-      )
+      include JSON::Serializable
+
+      property url : String
     end
 
     # A response to the Get Gateway Bot REST API call.
     struct GatewayBotResponse
-      JSON.mapping(
-        url: String,
-        shards: Int32,
-        session_start_limit: SessionStartLimit
-      )
+      include JSON::Serializable
+
+      property url : String
+      property shards : Int32
+      property session_start_limit : SessionStartLimit
     end
 
     # Session start limit details included in the Get Gateway Bot REST API call.
     struct SessionStartLimit
-      JSON.mapping(
-        total: Int32,
-        remaining: Int32,
-        reset_after: {type: Time::Span, converter: TimeSpanMillisecondsConverter}
-      )
+      include JSON::Serializable
+
+      property total : Int32
+      property remaining : Int32
+      @[JSON::Field(converter: TimeSpanMillisecondsConverter)]
+      property reset_after : Time::Span
     end
 
     # A response to the Get Guild Prune Count REST API call.
     struct PruneCountResponse
-      JSON.mapping(
-        pruned: UInt32
-      )
+      include JSON::Serializable
+
+      property pruned : UInt32
     end
 
     # A response to the Get Guild Vanity URL REST API call.
     struct GuildVanityURLResponse
-      JSON.mapping(
-        code: String
-      )
+      include JSON::Serializable
+
+      property code : String
     end
 
     # A request payload to rearrange channels in a `Guild` by a REST API call.
@@ -74,10 +75,10 @@ module Discord
 
     # A request payload to rearrange roles in a `Guild` by a REST API call.
     struct ModifyRolePositionPayload
-      JSON.mapping(
-        id: Snowflake,
-        position: Int32
-      )
+      include JSON::Serializable
+
+      property id : Snowflake
+      property position : Int32
 
       def initialize(id : UInt64 | Snowflake, @position : Int32)
         id = Snowflake.new(id) unless id.is_a?(Snowflake)

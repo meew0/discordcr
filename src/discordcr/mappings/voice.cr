@@ -2,29 +2,29 @@ require "./converters"
 
 module Discord
   struct VoiceState
-    JSON.mapping(
-      guild_id: Snowflake?,
-      channel_id: Snowflake?,
-      user_id: Snowflake,
-      member: GuildMember?,
-      session_id: String,
-      deaf: Bool,
-      mute: Bool,
-      self_deaf: Bool,
-      self_mute: Bool,
-      suppress: Bool
-    )
+    include JSON::Serializable
+
+    property guild_id : Snowflake?
+    property channel_id : Snowflake?
+    property user_id : Snowflake
+    property member : GuildMember?
+    property session_id : String
+    property deaf : Bool
+    property mute : Bool
+    property self_deaf : Bool
+    property self_mute : Bool
+    property suppress : Bool
   end
 
   struct VoiceRegion
-    JSON.mapping(
-      id: String,
-      name: String,
-      sample_hostname: String,
-      sample_port: UInt16,
-      custom: Bool?,
-      vip: Bool,
-      optimal: Bool
-    )
+    include JSON::Serializable
+
+    property id : String
+    property name : String
+    property sample_hostname : String
+    property sample_port : UInt16
+    property custom : Bool?
+    property vip : Bool
+    property optimal : Bool
   end
 end

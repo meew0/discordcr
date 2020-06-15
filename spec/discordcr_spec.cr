@@ -2,15 +2,17 @@ require "yaml"
 require "./spec_helper"
 
 struct StructWithTime
-  JSON.mapping(
-    data: {type: Time, converter: Discord::TimestampConverter}
-  )
+  include JSON::Serializable
+
+  @[JSON::Field(converter: Discord::TimestampConverter)]
+  property data : Time
 end
 
 struct StructWithMaybeTime
-  JSON.mapping(
-    data: {type: Time?, converter: Discord::MaybeTimestampConverter, emit_null: true}
-  )
+  include JSON::Serializable
+
+  @[JSON::Field(converter: Discord::MaybeTimestampConverter, emit_null: true)]
+  property data : Time?
 end
 
 describe Discord do

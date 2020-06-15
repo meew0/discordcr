@@ -3,6 +3,8 @@ require "./voice"
 
 module Discord
   struct Guild
+    include JSON::Serializable
+
     # :nodoc:
     def initialize(payload : Gateway::GuildCreatePayload)
       @id = payload.id
@@ -23,27 +25,27 @@ module Discord
       @system_channel_id = payload.system_channel_id
     end
 
-    JSON.mapping(
-      id: Snowflake,
-      name: String,
-      icon: String?,
-      splash: String?,
-      owner_id: Snowflake,
-      region: String,
-      afk_channel_id: Snowflake?,
-      afk_timeout: Int32?,
-      embed_enabled: Bool?,
-      embed_channel_id: Snowflake?,
-      verification_level: UInt8,
-      roles: Array(Role),
-      emoji: {type: Array(Emoji), key: "emojis"},
-      features: Array(String),
-      widget_enabled: {type: Bool, nilable: true},
-      widget_channel_id: Snowflake?,
-      default_message_notifications: UInt8,
-      explicit_content_filter: UInt8,
-      system_channel_id: Snowflake?
-    )
+    property id : Snowflake
+    property name : String
+    property icon : String?
+    property splash : String?
+    property owner_id : Snowflake
+    property region : String
+    property afk_channel_id : Snowflake?
+    property afk_timeout : Int32?
+    property embed_enabled : Bool?
+    property embed_channel_id : Snowflake?
+    property verification_level : UInt8
+    property roles : Array(Role)
+    @[JSON::Field(key: "emojis")]
+    property emoji : Array(Emoji)
+    property features : Array(String)
+    @[JSON::Field(nilable: true)]
+    property widget_enabled : Bool?
+    property widget_channel_id : Snowflake?
+    property default_message_notifications : UInt8
+    property explicit_content_filter : UInt8
+    property system_channel_id : Snowflake?
 
     {% unless flag?(:correct_english) %}
       def emojis
@@ -51,7 +53,7 @@ module Discord
       end
     {% end %}
 
-    # Produces a CDN URL to this guild's icon in the given `format` and `size`,
+    # Produces a CDN URL to this guild's icon in the given `format` and `size`
     # or `nil` if no icon is set.
     def icon_url(format : CDN::GuildIconFormat = CDN::GuildIconFormat::WebP,
                  size : Int32 = 128)
@@ -60,7 +62,7 @@ module Discord
       end
     end
 
-    # Produces a CDN URL to this guild's splash in the given `format` and `size`,
+    # Produces a CDN URL to this guild's splash in the given `format` and `size`
     # or `nil` if no splash is set.
     def splash_url(format : CDN::GuildSplashFormat = CDN::GuildSplashFormat::WebP,
                    size : Int32 = 128)
@@ -71,20 +73,22 @@ module Discord
   end
 
   struct UnavailableGuild
-    JSON.mapping(
-      id: Snowflake,
-      unavailable: Bool
-    )
+    include JSON::Serializable
+
+    property id : Snowflake
+    property unavailable : Bool
   end
 
   struct GuildEmbed
-    JSON.mapping(
-      enabled: Bool,
-      channel_id: Snowflake?
-    )
+    include JSON::Serializable
+
+    property enabled : Bool
+    property channel_id : Snowflake?
   end
 
   struct GuildMember
+    include JSON::Serializable
+
     # :nodoc:
     def initialize(user : User, partial_member : PartialGuildMember)
       @user = user
@@ -120,14 +124,13 @@ module Discord
       # Presence updates have no joined_at or deaf/mute, thanks Discord
     end
 
-    JSON.mapping(
-      user: User,
-      nick: String?,
-      roles: Array(Snowflake),
-      joined_at: {type: Time?, converter: MaybeTimestampConverter},
-      deaf: Bool?,
-      mute: Bool?
-    )
+    property user : User
+    property nick : String?
+    property roles : Array(Snowflake)
+    @[JSON::Field(converter: Discord::MaybeTimestampConverter)]
+    property joined_at : Time?
+    property deaf : Bool?
+    property mute : Bool?
 
     # Produces a string to mention this member in a message
     def mention
@@ -140,29 +143,32 @@ module Discord
   end
 
   struct PartialGuildMember
-    JSON.mapping(
-      nick: String?,
-      roles: Array(Snowflake),
-      joined_at: {type: Time, converter: TimestampConverter},
-      deaf: Bool,
-      mute: Bool
-    )
+    include JSON::Serializable
+
+    property nick : String?
+    property roles : Array(Snowflake)
+    @[JSON::Field(converter: Discord::TimestampConverter)]
+    property joined_at : Time
+    property deaf : Bool
+    property mute : Bool
   end
 
   struct Integration
-    JSON.mapping(
-      id: Snowflake,
-      name: String,
-      type: String,
-      enabled: Bool,
-      syncing: Bool,
-      role_id: Snowflake,
-      expire_behaviour: {type: UInt8, key: "expire_behavior"},
-      expire_grace_period: Int32,
-      user: User,
-      account: IntegrationAccount,
-      synced_at: {type: Time, converter: Time::EpochConverter}
-    )
+    include JSON::Serializable
+
+    property id : Snowflake
+    property name : String
+    property type : String
+    property enabled : Bool
+    property syncing : Bool
+    property role_id : Snowflake
+    @[JSON::Field(key: "expire_behavior")]
+    property expire_behaviour : UInt8
+    property expire_grace_period : Int32
+    property user : User
+    property account : IntegrationAccount
+    @[JSON::Field(converter: Time::EpochConverter)]
+    property synced_at : Time
 
     {% unless flag?(:correct_english) %}
       def expire_behavior
@@ -172,21 +178,21 @@ module Discord
   end
 
   struct IntegrationAccount
-    JSON.mapping(
-      id: String,
-      name: String
-    )
+    include JSON::Serializable
+
+    property id : String
+    property name : String
   end
 
   struct Emoji
-    JSON.mapping(
-      id: Snowflake,
-      name: String,
-      roles: Array(Snowflake),
-      require_colons: Bool,
-      managed: Bool,
-      animated: Bool
-    )
+    include JSON::Serializable
+
+    property id : Snowflake
+    property name : String
+    property roles : Array(Snowflake)
+    property require_colons : Bool
+    property managed : Bool
+    property animated : Bool
 
     # Produces a CDN URL to this emoji's image in the given `size`. Will return
     # a PNG, or GIF if the emoji is animated.
@@ -214,16 +220,17 @@ module Discord
   end
 
   struct Role
-    JSON.mapping(
-      id: Snowflake,
-      name: String,
-      permissions: Permissions,
-      colour: {type: UInt32, key: "color"},
-      hoist: Bool,
-      position: Int32,
-      managed: Bool,
-      mentionable: Bool
-    )
+    include JSON::Serializable
+
+    property id : Snowflake
+    property name : String
+    property permissions : Permissions
+    @[JSON::Field(key: "color")]
+    property colour : UInt32
+    property hoist : Bool
+    property position : Int32
+    property managed : Bool
+    property mentionable : Bool
 
     {% unless flag?(:correct_english) %}
       def color
@@ -238,13 +245,15 @@ module Discord
   end
 
   struct GuildBan
-    JSON.mapping(
-      user: User,
-      reason: String?
-    )
+    include JSON::Serializable
+
+    property user : User
+    property reason : String?
   end
 
   struct GamePlaying
+    include JSON::Serializable
+
     def initialize(@name = nil, @type : Type? = nil, @url = nil)
     end
 
@@ -256,18 +265,16 @@ module Discord
       Custom    = 4
     end
 
-    JSON.mapping(
-      name: String?,
-      type: Type?,
-      url: String?
-    )
+    property name : String?
+    property type : Type?
+    property url : String?
   end
 
   struct Presence
-    JSON.mapping(
-      user: PartialUser,
-      game: GamePlaying?,
-      status: String
-    )
+    include JSON::Serializable
+
+    property user : PartialUser
+    property game : GamePlaying?
+    property status : String
   end
 end

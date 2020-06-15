@@ -33,10 +33,10 @@ module Discord
 
   # An API error response.
   struct APIError
-    JSON.mapping(
-      code: Int32,
-      message: String
-    )
+    include JSON::Serializable
+
+    property code : Int32
+    property message : String
   end
 
   # This exception is raised in `REST#request` when a request fails with an

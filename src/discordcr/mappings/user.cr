@@ -2,6 +2,8 @@ require "./converters"
 
 module Discord
   struct User
+    include JSON::Serializable
+
     # :nodoc:
     def initialize(partial : PartialUser)
       @username = partial.username.not_nil!
@@ -12,19 +14,17 @@ module Discord
       @bot = partial.bot
     end
 
-    JSON.mapping(
-      username: String,
-      id: Snowflake,
-      discriminator: String,
-      avatar: String?,
-      email: String?,
-      bot: Bool?,
-      system: Bool?,
-      mfa_enabled: Bool?,
-      verified: Bool?,
-      member: PartialGuildMember?,
-      flags: UserFlags?,
-    )
+    property username : String
+    property id : Snowflake
+    property discriminator : String
+    property avatar : String?
+    property email : String?
+    property bot : Bool?
+    property system : Bool?
+    property mfa_enabled : Bool?
+    property verified : Bool?
+    property member : PartialGuildMember?
+    property flags : UserFlags?
 
     # Produces a CDN URL to this user's avatar in the given `size`.
     # If the user has an avatar a WebP will be returned, or a GIF
@@ -73,14 +73,14 @@ module Discord
   end
 
   struct PartialUser
-    JSON.mapping(
-      username: String?,
-      id: Snowflake,
-      discriminator: String?,
-      avatar: String?,
-      email: String?,
-      bot: Bool?
-    )
+    include JSON::Serializable
+
+    property username : String?
+    property id : Snowflake
+    property discriminator : String?
+    property avatar : String?
+    property email : String?
+    property bot : Bool?
 
     def full? : Bool
       !@username.nil? && !@discriminator.nil? && !@avatar.nil?
@@ -88,21 +88,21 @@ module Discord
   end
 
   struct UserGuild
-    JSON.mapping(
-      id: Snowflake,
-      name: String,
-      icon: String?,
-      owner: Bool,
-      permissions: Permissions
-    )
+    include JSON::Serializable
+
+    property id : Snowflake
+    property name : String
+    property icon : String?
+    property owner : Bool
+    property permissions : Permissions
   end
 
   struct Connection
-    JSON.mapping(
-      id: Snowflake,
-      name: String,
-      type: String,
-      revoked: Bool
-    )
+    include JSON::Serializable
+
+    property id : Snowflake
+    property name : String
+    property type : String
+    property revoked : Bool
   end
 end
