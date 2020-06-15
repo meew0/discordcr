@@ -5,12 +5,14 @@ module Discord
     # A response to the Get Gateway REST API call.
     struct GatewayResponse
       include JSON::Serializable
+
       property url : String
     end
 
     # A response to the Get Gateway Bot REST API call.
     struct GatewayBotResponse
       include JSON::Serializable
+
       property url : String
       property shards : Int32
       property session_start_limit : SessionStartLimit
@@ -19,6 +21,7 @@ module Discord
     # Session start limit details included in the Get Gateway Bot REST API call.
     struct SessionStartLimit
       include JSON::Serializable
+
       property total : Int32
       property remaining : Int32
       @[JSON::Field(converter: TimeSpanMillisecondsConverter)]
@@ -28,12 +31,14 @@ module Discord
     # A response to the Get Guild Prune Count REST API call.
     struct PruneCountResponse
       include JSON::Serializable
+
       property pruned : UInt32
     end
 
     # A response to the Get Guild Vanity URL REST API call.
     struct GuildVanityURLResponse
       include JSON::Serializable
+
       property code : String
     end
 
@@ -71,6 +76,7 @@ module Discord
     # A request payload to rearrange roles in a `Guild` by a REST API call.
     struct ModifyRolePositionPayload
       include JSON::Serializable
+
       property id : Snowflake
       property position : Int32
 

@@ -18,6 +18,7 @@ module Discord
 
   struct Message
     include JSON::Serializable
+
     property type : MessageType
     property content : String
     property id : Snowflake
@@ -52,6 +53,7 @@ module Discord
 
   struct Activity
     include JSON::Serializable
+
     property type : ActivityType
     property party_id : String?
   end
@@ -72,6 +74,7 @@ module Discord
 
   struct Channel
     include JSON::Serializable
+
     # :nodoc:
     def initialize(private_channel : PrivateChannel)
       @id = private_channel.id
@@ -106,6 +109,7 @@ module Discord
 
   struct PrivateChannel
     include JSON::Serializable
+
     property id : Snowflake
     property type : ChannelType
     property recipients : Array(User)
@@ -114,6 +118,7 @@ module Discord
 
   struct Overwrite
     include JSON::Serializable
+
     property id : Snowflake
     property type : String
     property allow : Permissions
@@ -122,6 +127,7 @@ module Discord
 
   struct Reaction
     include JSON::Serializable
+
     property emoji : ReactionEmoji
     property count : UInt32
     property me : Bool
@@ -129,12 +135,14 @@ module Discord
 
   struct ReactionEmoji
     include JSON::Serializable
+
     property id : Snowflake?
     property name : String
   end
 
   struct Embed
     include JSON::Serializable
+
     def initialize(@title : String? = nil, @type : String = "rich",
                    @description : String? = nil, @url : String? = nil,
                    @timestamp : Time? = nil, @colour : UInt32? = nil,
@@ -168,6 +176,7 @@ module Discord
 
   struct EmbedThumbnail
     include JSON::Serializable
+
     def initialize(@url : String)
     end
 
@@ -179,6 +188,7 @@ module Discord
 
   struct EmbedVideo
     include JSON::Serializable
+
     property url : String
     property height : UInt32
     property width : UInt32
@@ -186,6 +196,7 @@ module Discord
 
   struct EmbedImage
     include JSON::Serializable
+
     def initialize(@url : String)
     end
 
@@ -197,12 +208,14 @@ module Discord
 
   struct EmbedProvider
     include JSON::Serializable
+
     property name : String
     property url : String?
   end
 
   struct EmbedAuthor
     include JSON::Serializable
+
     def initialize(@name : String? = nil, @url : String? = nil, @icon_url : String? = nil)
     end
 
@@ -214,6 +227,7 @@ module Discord
 
   struct EmbedFooter
     include JSON::Serializable
+
     def initialize(@text : String? = nil, @icon_url : String? = nil)
     end
 
@@ -224,6 +238,7 @@ module Discord
 
   struct EmbedField
     include JSON::Serializable
+
     def initialize(@name : String, @value : String, @inline : Bool = false)
     end
 
@@ -234,6 +249,7 @@ module Discord
 
   struct Attachment
     include JSON::Serializable
+
     property id : Snowflake
     property filename : String
     property size : UInt32

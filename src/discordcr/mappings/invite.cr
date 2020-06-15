@@ -4,6 +4,7 @@ require "./user"
 module Discord
   struct Invite
     include JSON::Serializable
+
     property code : String
     property guild : InviteGuild
     property channel : InviteChannel
@@ -11,6 +12,7 @@ module Discord
 
   struct InviteMetadata
     include JSON::Serializable
+
     property code : String
     property guild : InviteGuild
     property channel : InviteChannel
@@ -26,6 +28,7 @@ module Discord
 
   struct InviteGuild
     include JSON::Serializable
+
     property id : Snowflake
     property name : String
     property splash_hash : String?
@@ -33,6 +36,7 @@ module Discord
 
   struct InviteChannel
     include JSON::Serializable
+
     property id : Snowflake
     property name : String
     property type : UInt8

@@ -3,6 +3,7 @@ require "./converters"
 module Discord
   struct User
     include JSON::Serializable
+
     # :nodoc:
     def initialize(partial : PartialUser)
       @username = partial.username.not_nil!
@@ -73,6 +74,7 @@ module Discord
 
   struct PartialUser
     include JSON::Serializable
+
     property username : String?
     property id : Snowflake
     property discriminator : String?
@@ -87,6 +89,7 @@ module Discord
 
   struct UserGuild
     include JSON::Serializable
+
     property id : Snowflake
     property name : String
     property icon : String?
@@ -96,6 +99,7 @@ module Discord
 
   struct Connection
     include JSON::Serializable
+
     property id : Snowflake
     property name : String
     property type : String

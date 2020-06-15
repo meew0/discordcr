@@ -7,6 +7,7 @@ module Discord
   module Gateway
     struct ReadyPayload
       include JSON::Serializable
+
       property v : UInt8
       property user : User
       property private_channels : Array(PrivateChannel)
@@ -16,11 +17,13 @@ module Discord
 
     struct ResumedPayload
       include JSON::Serializable
+
       property _trace : Array(String)
     end
 
     struct IdentifyPacket
       include JSON::Serializable
+
       def initialize(token, properties, large_threshold, compress, shard, intents)
         @op = Discord::Client::OP_IDENTIFY
         @d = IdentifyPayload.new(token, properties, large_threshold, compress, shard, intents)
@@ -32,6 +35,7 @@ module Discord
 
     struct IdentifyPayload
       include JSON::Serializable
+
       def initialize(@token, @properties, @compress, @large_threshold, @shard, @intents)
       end
 
@@ -45,6 +49,7 @@ module Discord
 
     struct IdentifyProperties
       include JSON::Serializable
+
       def initialize(@os, @browser, @device, @referrer, @referring_domain)
       end
 
@@ -81,6 +86,7 @@ module Discord
 
     struct ResumePacket
       include JSON::Serializable
+
       def initialize(token, session_id, seq)
         @op = Discord::Client::OP_RESUME
         @d = ResumePayload.new(token, session_id, seq)
@@ -93,6 +99,7 @@ module Discord
     # :nodoc:
     struct ResumePayload
       include JSON::Serializable
+
       def initialize(@token, @session_id, @seq)
       end
 
@@ -103,6 +110,7 @@ module Discord
 
     struct StatusUpdatePacket
       include JSON::Serializable
+
       def initialize(status, game, afk, since)
         @op = Discord::Client::OP_STATUS_UPDATE
         @d = StatusUpdatePayload.new(status, game, afk, since)
@@ -115,6 +123,7 @@ module Discord
     # :nodoc:
     struct StatusUpdatePayload
       include JSON::Serializable
+
       def initialize(@status, @game, @afk, @since)
       end
 
@@ -129,6 +138,7 @@ module Discord
 
     struct VoiceStateUpdatePacket
       include JSON::Serializable
+
       def initialize(guild_id, channel_id, self_mute, self_deaf)
         @op = Discord::Client::OP_VOICE_STATE_UPDATE
         @d = VoiceStateUpdatePayload.new(guild_id, channel_id, self_mute, self_deaf)
@@ -141,6 +151,7 @@ module Discord
     # :nodoc:
     struct VoiceStateUpdatePayload
       include JSON::Serializable
+
       def initialize(@guild_id, @channel_id, @self_mute, @self_deaf)
       end
 
@@ -153,6 +164,7 @@ module Discord
 
     struct RequestGuildMembersPacket
       include JSON::Serializable
+
       def initialize(guild_id, query, limit)
         @op = Discord::Client::OP_REQUEST_GUILD_MEMBERS
         @d = RequestGuildMembersPayload.new(guild_id, query, limit)
@@ -165,6 +177,7 @@ module Discord
     # :nodoc:
     struct RequestGuildMembersPayload
       include JSON::Serializable
+
       def initialize(@guild_id, @query, @limit)
       end
 
@@ -175,6 +188,7 @@ module Discord
 
     struct HelloPayload
       include JSON::Serializable
+
       property heartbeat_interval : UInt32
       property _trace : Array(String)
     end
@@ -183,6 +197,7 @@ module Discord
     # and presences.
     struct GuildCreatePayload
       include JSON::Serializable
+
       property id : Snowflake
       property name : String
       property icon : String?
@@ -217,20 +232,23 @@ module Discord
 
     struct GuildDeletePayload
       include JSON::Serializable
+
       property id : Snowflake
       property unavailable : Bool?
     end
 
     struct GuildBanPayload
       include JSON::Serializable
+
       property user : User
       property guild_id : Snowflake
     end
 
     struct GuildEmojiUpdatePayload
       include JSON::Serializable
+
       property guild_id : Snowflake
-        @[JSON::Field(key: "emojis")]
+      @[JSON::Field(key: "emojis")]
       property emoji : Array(Emoji)
 
       {% unless flag?(:correct_english) %}
@@ -242,11 +260,13 @@ module Discord
 
     struct GuildIntegrationsUpdatePayload
       include JSON::Serializable
+
       property guild_id : Snowflake
     end
 
     struct GuildMemberAddPayload
       include JSON::Serializable
+
       property user : User
       property nick : String?
       property roles : Array(Snowflake)
@@ -259,6 +279,7 @@ module Discord
 
     struct GuildMemberUpdatePayload
       include JSON::Serializable
+
       property user : User
       property roles : Array(Snowflake)
       @[JSON::Field(nilable: true)]
@@ -268,30 +289,35 @@ module Discord
 
     struct GuildMemberRemovePayload
       include JSON::Serializable
+
       property user : User
       property guild_id : Snowflake
     end
 
     struct GuildMembersChunkPayload
       include JSON::Serializable
+
       property guild_id : Snowflake
       property members : Array(GuildMember)
     end
 
     struct GuildRolePayload
       include JSON::Serializable
+
       property guild_id : Snowflake
       property role : Role
     end
 
     struct GuildRoleDeletePayload
       include JSON::Serializable
+
       property guild_id : Snowflake
       property role_id : Snowflake
     end
 
     struct MessageReactionPayload
       include JSON::Serializable
+
       property user_id : Snowflake
       property channel_id : Snowflake
       property message_id : Snowflake
@@ -301,6 +327,7 @@ module Discord
 
     struct MessageReactionRemoveAllPayload
       include JSON::Serializable
+
       property channel_id : Snowflake
       property message_id : Snowflake
       property guild_id : Snowflake?
@@ -308,6 +335,7 @@ module Discord
 
     struct MessageReactionRemoveEmojiPayload
       include JSON::Serializable
+
       property channel_id : Snowflake
       property guild_id : Snowflake
       property message_id : Snowflake
@@ -316,6 +344,7 @@ module Discord
 
     struct MessageUpdatePayload
       include JSON::Serializable
+
       property type : UInt8?
       property content : String?
       property id : Snowflake
@@ -335,6 +364,7 @@ module Discord
 
     struct MessageDeletePayload
       include JSON::Serializable
+
       property id : Snowflake
       property channel_id : Snowflake
       property guild_id : Snowflake?
@@ -342,6 +372,7 @@ module Discord
 
     struct MessageDeleteBulkPayload
       include JSON::Serializable
+
       property ids : Array(Snowflake)
       property channel_id : Snowflake
       property guild_id : Snowflake?
@@ -349,6 +380,7 @@ module Discord
 
     struct PresenceUpdatePayload
       include JSON::Serializable
+
       property user : PartialUser
       property roles : Array(Snowflake)
       property game : GamePlaying?
@@ -359,6 +391,7 @@ module Discord
 
     struct TypingStartPayload
       include JSON::Serializable
+
       property channel_id : Snowflake
       property user_id : Snowflake
       property guild_id : Snowflake?
@@ -369,6 +402,7 @@ module Discord
 
     struct VoiceServerUpdatePayload
       include JSON::Serializable
+
       property token : String
       property guild_id : Snowflake
       property endpoint : String
@@ -376,12 +410,14 @@ module Discord
 
     struct WebhooksUpdatePayload
       include JSON::Serializable
+
       property guild_id : Snowflake
       property channel_id : Snowflake
     end
 
     struct ChannelPinsUpdatePayload
       include JSON::Serializable
+
       @[JSON::Field(converter: Discord::MaybeTimestampConverter)]
       property last_pin_timestamp : Time?
       property channel_id : Snowflake

@@ -4,6 +4,7 @@ require "./voice"
 module Discord
   struct Guild
     include JSON::Serializable
+
     # :nodoc:
     def initialize(payload : Gateway::GuildCreatePayload)
       @id = payload.id
@@ -73,18 +74,21 @@ module Discord
 
   struct UnavailableGuild
     include JSON::Serializable
+
     property id : Snowflake
     property unavailable : Bool
   end
 
   struct GuildEmbed
     include JSON::Serializable
+
     property enabled : Bool
     property channel_id : Snowflake?
   end
 
   struct GuildMember
     include JSON::Serializable
+
     # :nodoc:
     def initialize(user : User, partial_member : PartialGuildMember)
       @user = user
@@ -140,6 +144,7 @@ module Discord
 
   struct PartialGuildMember
     include JSON::Serializable
+
     property nick : String?
     property roles : Array(Snowflake)
     @[JSON::Field(converter: Discord::TimestampConverter)]
@@ -150,6 +155,7 @@ module Discord
 
   struct Integration
     include JSON::Serializable
+
     property id : Snowflake
     property name : String
     property type : String
@@ -173,12 +179,14 @@ module Discord
 
   struct IntegrationAccount
     include JSON::Serializable
+
     property id : String
     property name : String
   end
 
   struct Emoji
     include JSON::Serializable
+
     property id : Snowflake
     property name : String
     property roles : Array(Snowflake)
@@ -213,6 +221,7 @@ module Discord
 
   struct Role
     include JSON::Serializable
+
     property id : Snowflake
     property name : String
     property permissions : Permissions
@@ -237,12 +246,14 @@ module Discord
 
   struct GuildBan
     include JSON::Serializable
+
     property user : User
     property reason : String?
   end
 
   struct GamePlaying
     include JSON::Serializable
+
     def initialize(@name = nil, @type : Type? = nil, @url = nil)
     end
 
@@ -261,6 +272,7 @@ module Discord
 
   struct Presence
     include JSON::Serializable
+
     property user : PartialUser
     property game : GamePlaying?
     property status : String

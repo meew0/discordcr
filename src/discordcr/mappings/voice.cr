@@ -3,6 +3,7 @@ require "./converters"
 module Discord
   struct VoiceState
     include JSON::Serializable
+
     property guild_id : Snowflake?
     property channel_id : Snowflake?
     property user_id : Snowflake
@@ -17,6 +18,7 @@ module Discord
 
   struct VoiceRegion
     include JSON::Serializable
+
     property id : String
     property name : String
     property sample_hostname : String

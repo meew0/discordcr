@@ -5,6 +5,7 @@ module Discord
   module VWS
     struct IdentifyPacket
       include JSON::Serializable
+
       def initialize(server_id, user_id, session_id, token)
         @op = Discord::VoiceClient::OP_IDENTIFY
         @d = IdentifyPayload.new(server_id, user_id, session_id, token)
@@ -16,6 +17,7 @@ module Discord
 
     struct IdentifyPayload
       include JSON::Serializable
+
       def initialize(@server_id, @user_id, @session_id, @token)
       end
 
@@ -27,6 +29,7 @@ module Discord
 
     struct SelectProtocolPacket
       include JSON::Serializable
+
       def initialize(protocol, data)
         @op = Discord::VoiceClient::OP_SELECT_PROTOCOL
         @d = SelectProtocolPayload.new(protocol, data)
@@ -38,6 +41,7 @@ module Discord
 
     struct SelectProtocolPayload
       include JSON::Serializable
+
       def initialize(@protocol, @data)
       end
 
@@ -47,6 +51,7 @@ module Discord
 
     struct ProtocolData
       include JSON::Serializable
+
       def initialize(@address, @port, @mode)
       end
 
@@ -57,6 +62,7 @@ module Discord
 
     struct ReadyPayload
       include JSON::Serializable
+
       property ssrc : Int32
       property port : Int32
       property modes : Array(String)
@@ -65,12 +71,14 @@ module Discord
 
     struct SessionDescriptionPayload
       include JSON::Serializable
+
       property secret_key : Array(UInt8)
       property mode : String
     end
 
     struct SpeakingPacket
       include JSON::Serializable
+
       def initialize(speaking, delay)
         @op = Discord::VoiceClient::OP_SPEAKING
         @d = SpeakingPayload.new(speaking, delay)
@@ -82,6 +90,7 @@ module Discord
 
     struct SpeakingPayload
       include JSON::Serializable
+
       def initialize(@speaking, @delay)
       end
 
@@ -91,6 +100,7 @@ module Discord
 
     struct HelloPayload
       include JSON::Serializable
+  
       property heartbeat_interval : Float32
     end
   end

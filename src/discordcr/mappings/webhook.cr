@@ -4,6 +4,7 @@ require "./user"
 module Discord
   struct Webhook
     include JSON::Serializable
+
     property id : Snowflake
     property guild_id : Snowflake?
     property channel_id : Snowflake
