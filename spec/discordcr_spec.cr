@@ -3,12 +3,14 @@ require "./spec_helper"
 
 struct StructWithTime
   include JSON::Serializable
+
   @[JSON::Field(converter: Discord::TimestampConverter)]
   property data : Time
 end
 
 struct StructWithMaybeTime
   include JSON::Serializable
+
   @[JSON::Field(converter: Discord::MaybeTimestampConverter, emit_null: true)]
   property data : Time?
 end

@@ -34,6 +34,7 @@ module Discord
   # An API error response.
   struct APIError
     include JSON::Serializable
+
     property code : Int32
     property message : String
   end

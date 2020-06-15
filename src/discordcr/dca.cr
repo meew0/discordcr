@@ -91,6 +91,7 @@ module Discord
   module DCA1Mappings
     struct Metadata
       include JSON::Serializable
+
       property dca : DCA
       property opus : Opus
       property info : Info?
@@ -100,12 +101,14 @@ module Discord
 
     struct DCA
       include JSON::Serializable
+
       property version : Int32
       property tool : Tool
     end
 
     struct Tool
       include JSON::Serializable
+
       property name : String
       property version : String
       property url : String?
@@ -114,6 +117,7 @@ module Discord
 
     struct Opus
       include JSON::Serializable
+
       property mode : String
       property sample_rate : Int32
       property frame_size : Int32
@@ -124,6 +128,7 @@ module Discord
 
     struct Info
       include JSON::Serializable
+
       property title : String?
       property artist : String?
       property album : String?
@@ -134,6 +139,7 @@ module Discord
 
     struct Origin
       include JSON::Serializable
+
       property source : String?
       property abr : Int32?
       property channels : Int32?
