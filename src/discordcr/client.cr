@@ -94,7 +94,7 @@ module Discord
     #
     # The *intents* value is used to request that only specific events are sent
     # to this client for the current session. For details on what `Intents` values
-    # correspond to which gateway events, see the [API docs]().
+    # correspond to which gateway events, see the [API docs](https://discord.com/developers/docs/topics/gateway#gateway-intents).
     def initialize(@token : String, @client_id : UInt64 | Snowflake | Nil = nil,
                    @shard : Gateway::ShardKey? = nil,
                    @large_threshold : Int32 = 100,
