@@ -35,7 +35,8 @@ module Discord
       pinned: Bool?,
       reactions: Array(Reaction)?,
       nonce: String | Int64?,
-      activity: Activity?
+      activity: Activity?,
+      stickers: Array(Sticker)?
     )
   end
 
@@ -254,5 +255,28 @@ module Discord
       height: UInt32?,
       width: UInt32?
     )
+  end
+
+  enum StickerFormatType : UInt8
+    Png    = 1
+    Apng   = 2
+    Lottie = 3
+
+    def self.new(pull : JSON::PullParser)
+      StickerFormatType.new(pull.read_int.to_u8)
+    end
+  end
+
+  struct Sticker
+    include JSON::Serializable
+
+    property id : Snowflake
+    property pack_id : Snowflake
+    property name : String
+    property description : String
+    property tags : String?
+    property asset : String
+    property preview_asset : String?
+    property format_type : StickerFormatType
   end
 end
